@@ -4,7 +4,6 @@ import {Colors} from './DesignSystem/Colors';
 import LightTheme from './DesignSystem/LightTheme';
 
 import {View, Text, StyleSheet} from 'react-native';
-//Useless Comment
 
 export default function App() {
   return (
