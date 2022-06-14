@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 export const Colors = {
-  Primary1: '#00CDB0',
-  Primary2: '#59DFCC',
+  Primary1: '#38d9a9',
+  Primary2: '#63e6be',
   Primary3: '#7DECDD',
   Secondary1: '#003762',
   Secondary2: '#005BA1',

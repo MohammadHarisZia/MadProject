@@ -5,6 +5,8 @@ export default StyleSheet.create({
   Light: {
     flex: 1,
     backgroundColor: 'white',
-    textColor: 'white',
+  },
+  Text: {
+    color: 'black',
   },
 });
