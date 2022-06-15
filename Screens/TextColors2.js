@@ -3,22 +3,22 @@ import Typography from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/Colors';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
-const TextColors = ({navigation, route}) => {
+const TextColors2 = ({navigation, route}) => {
   return (
     <View>
       <TouchableOpacity
         style={styles.flex}
         onPress={() => {
-          navigation.navigate('TextColors2');
+          navigation.navigate('TextColors');
         }}>
-        <Text style={[Typography.Header_24pt, {color: Colors.Secondary1}]}>
-          Doctor
+        <Text style={[Typography.Header_24pt, {color: Colors.Primary1}]}>
+          Hello
         </Text>
-        <Text style={[Typography.Header_24pt, {color: Colors.Secondary2}]}>
-          Doctor
+        <Text style={[Typography.Header_24pt, {color: Colors.Primary2}]}>
+          Hello
         </Text>
-        <Text style={[Typography.Header_24pt, {color: Colors.Secondary3}]}>
-          Doctor
+        <Text style={[Typography.Header_24pt, {color: Colors.Primary3}]}>
+          Hello
         </Text>
       </TouchableOpacity>
     </View>
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TextColors;
+export default TextColors2;
