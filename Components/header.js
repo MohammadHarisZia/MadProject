@@ -3,7 +3,6 @@ import Typography from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/Colors';
 import LightTheme from '../DesignSystem/LightTheme';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import Back from '../assets/Icons/BackBtn.svg';
 import PakMedicLogo from '../assets/Icons/PakMedicLogo';
 
 const Header = () => {
