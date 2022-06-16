@@ -1,55 +1,63 @@
-import {View, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // local imports
 import {Colors} from '../../../DesignSystem/Colors';
 
-const ChatHeader = () => {
+const ChatHeader = props => {
   return (
     <View style={styles.container}>
-      {/* Back icon */}
-
+      {/* Back btn */}
       <TouchableOpacity style={styles.backBtn}>
         <Ionicons name="chevron-back" size={30} color={'#484848'} />
       </TouchableOpacity>
-      <View style={styles.searchContainer}>
-        <TextInput
-          onChangeText={() => {}}
-          placeholder={'Search...'}
-          style={styles.search}
-          placeholderTextColor={Colors.Primary3}
-        />
-        <TouchableOpacity style={styles.searchIconContainer}>
-          <Ionicons name="search" size={20} color={'#484848'} />
+
+      {/* Receiver name */}
+      <Text style={styles.receiver}>
+        {props?.recieverName ? props?.recieverName : 'default name'}
+      </Text>
+
+      {/* Icons */}
+      <View style={styles.callControllers}>
+        <TouchableOpacity style={styles.controller}>
+          <Ionicons name="call" size={20} color={'#808080'} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.controller}>
+          <Ionicons name="videocam" size={20} color={'#808080'} />
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
+export default ChatHeader;
+
 const styles = StyleSheet.create({
   container: {
     width: '100%',
     backgroundColor: Colors.Primary3,
-    padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    borderRadius: 150 / 2,
-    width: 200,
-    backgroundColor: Colors.Secondary3,
-  },
-  searchIconContainer: {
     padding: 5,
-    // backgroundColor: Colors.,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  receiver: {
+    fontFamily: 'Inter',
+    fontSize: 20,
+    color: '#484848',
+    // backgroundColor: Colors.Primary1,
+    paddingLeft: 30,
+  },
+
+  callControllers: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  controller: {
+    paddingHorizontal: 10,
   },
 });
-
-export default ChatHeader;

@@ -3,9 +3,9 @@ import React, {useState} from 'react';
 
 // local imports
 import UserChat from '../../components/UserChat/UserChat';
-import ChatHeader from '../../components/ChatHeader/ChatHeader';
 import Options from '../../components/Options/Options';
 import UserCall from '../../components/UserCall/UserCall';
+import HistoryHeader from '../../components/HistoryHeader/HistoryHeader';
 
 const ChatScreen = () => {
   const [option, setOption] = useState('chat');
@@ -20,7 +20,7 @@ const ChatScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ChatHeader />
+      <HistoryHeader />
       <Options
         onPressChat={onPressChat}
         onPressCall={onPressCall}

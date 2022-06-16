@@ -7,12 +7,14 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import Back from './assets/Icons/back-btn.svg';
 
-import ChatHistory from './src/screens/ChatHistory/ChatHistory';
+import ChatHistory from './src/screens/ChatHistoryScreen/ChatHistory';
+import Chat from './src/screens/ChatScreen/Chat';
 
 export default function App() {
   return (
     <View style={LightTheme.Light}>
-      <ChatHistory />
+      {/* <ChatHistory /> */}
+      <Chat />
     </View>
   );
 }
