@@ -41,7 +41,7 @@ const VoiceCall = props => {
           <TouchableOpacity
             style={[
               styles.smallIcon,
-              {backgroundColor: `${isMuted ? '#808080' : '#d0d0d0'}`},
+              {backgroundColor: `${isMuted ? '#808080' : '#eeeeee'}`},
             ]}
             onPress={() => {
               setIsMuted(prevState => !prevState);
@@ -49,14 +49,14 @@ const VoiceCall = props => {
             <FontAwesome name="microphone-slash" size={20} color={'#fff'} />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.bigIcon}>
+          <TouchableOpacity style={styles.hangup}>
             <Material name="call-end" size={30} color="#ffffff" />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[
               styles.smallIcon,
-              {backgroundColor: `${isSpeaker ? '#808080' : '#d0d0d0'}`},
+              {backgroundColor: `${isSpeaker ? '#808080' : '#eeeeee'}`},
             ]}
             onPress={() => {
               setIsSpeaker(prevState => !prevState);

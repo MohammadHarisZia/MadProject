@@ -11,6 +11,7 @@ import Chat from './src/screens/ChatScreen/Chat';
 import OutgoingCall from './src/screens/OutgoingCallScreen/OutgoingCall';
 import IncomingCall from './src/screens/IncomingCallScreen/IncomingCall';
 import VoiceReceived from './src/screens/VoiceCallScreen/VoiceCall';
+import VideoCall from './src/screens/VideoCallScreen/VideoCall';
 
 export default function App() {
   return (
@@ -19,7 +20,8 @@ export default function App() {
       {/* <Chat /> */}
       {/* <OutgoingCall /> */}
       {/* <IncomingCall /> */}
-      <VoiceReceived />
+      {/* <VoiceReceived /> */}
+      <VideoCall />
     </View>
   );
 }
