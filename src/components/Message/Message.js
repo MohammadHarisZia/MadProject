@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
   message: {
     maxWidth: '70%',
     fontSize: 12,
-
     fontFamily: 'Roboto',
     paddingHorizontal: 10,
     paddingVertical: 5,

@@ -1,20 +1,25 @@
 import React from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+
+// local imports
+import Back from './assets/Icons/back-btn.svg';
 import Typography from './DesignSystem/Typography';
 import {Colors} from './DesignSystem/Colors';
 import LightTheme from './DesignSystem/LightTheme';
-
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-
-import Back from './assets/Icons/back-btn.svg';
-
 import ChatHistory from './src/screens/ChatHistoryScreen/ChatHistory';
 import Chat from './src/screens/ChatScreen/Chat';
+import OutgoingCall from './src/screens/OutgoingCallScreen/OutgoingCall';
+import IncomingCall from './src/screens/IncomingCallScreen/IncomingCall';
+import VoiceReceived from './src/screens/VoiceCallScreen/VoiceCall';
 
 export default function App() {
   return (
     <View style={LightTheme.Light}>
       {/* <ChatHistory /> */}
-      <Chat />
+      {/* <Chat /> */}
+      {/* <OutgoingCall /> */}
+      {/* <IncomingCall /> */}
+      <VoiceReceived />
     </View>
   );
 }
