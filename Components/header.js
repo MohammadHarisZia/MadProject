@@ -4,6 +4,7 @@ import {Colors} from '../DesignSystem/Colors';
 import LightTheme from '../DesignSystem/LightTheme';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import PakMedicLogo from '../assets/Icons/PakMedicLogo';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Header = () => {
   return (
@@ -23,15 +24,7 @@ const Header = () => {
         </Text>
       </View>
       <TouchableOpacity>
-        <Image
-          style={{
-            width: 45,
-            height: 45,
-            marginRight: 10,
-            borderRadius: 30,
-          }}
-          source={{uri: 'https://avatars.githubusercontent.com/u/63912301?v=4'}}
-        />
+      <Icon name="user" size={30} color={Colors.MonochromeBlue900} style={{marginRight:10}}/>
       </TouchableOpacity>
     </View>
   );
@@ -42,15 +35,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  icon: {
-    padding: 20,
-    margin: 10,
-    borderWidth: 1,
-    width: 50,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   header: {
     backgroundColor: Colors.Primary1,
