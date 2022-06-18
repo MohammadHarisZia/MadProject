@@ -10,12 +10,26 @@ import AddMoreBtn from '../Components/AddMoreBtn';
 import DropDown from '../assets/Icons/DropDown.svg';
 import SearchIcon from '../assets/Icons/Search.svg';
 
+import ComplaintCart from '../Components/ComplaintCart';
+
 const ComplaintDesk = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <Heading></Heading>
       <ComplaintDeskBar></ComplaintDeskBar>
       <AddMoreBtn></AddMoreBtn>
+      <ComplaintCart
+        ticketID={10}
+        complaint="I lost my dog and i hate it here"
+        status="On Hold"></ComplaintCart>
+      <ComplaintCart
+        ticketID={10}
+        complaint="I lost my dog and i hate it here"
+        status="Reviewed"></ComplaintCart>
+      <ComplaintCart
+        ticketID={10}
+        complaint="I lost my dog and i hate it here"
+        status="In Progress"></ComplaintCart>
     </View>
   );
 };
