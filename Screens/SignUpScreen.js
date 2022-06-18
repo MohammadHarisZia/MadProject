@@ -19,29 +19,43 @@ import SocialBtn from '../Components/SocialsButton';
 const SignInScreen = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [Cpassword, setCPassword] = useState();
+  const [phone, setPhone] = useState();
+  const [pmcID, setPmcID] = useState();
 
 return(
     <View style={styles.container}>
         <View style={styles.logoContainer}>
-        <PakMedicLogo width={150} height={150}/>
+        <PakMedicLogo width={70} height={70}/>
         </View>
         <View>
             <InputText labelValue={email} onChangeText={(userEmail) => setEmail(userEmail)} 
             placeholderText={'Email'} iconType={'user'}></InputText>
+
             <InputText labelValue={password} onChangeText={(userPassword) => setPassword(userPassword)} 
             placeholderText={'Password'} iconType={'lock'} secureTextEntry={true}></InputText>
+
+            <InputText labelValue={Cpassword} onChangeText={(userCPassword) => setCPassword(userCPassword)} 
+            placeholderText={'Confirm Password'} iconType={'lock'} secureTextEntry={true}></InputText>
+
+            <InputText labelValue={phone} onChangeText={(userphone) => setPhone(userphone)} 
+            placeholderText={'Phone no.'} iconType={'phone'} keyboardType={'phone-pad'}></InputText>
+
+            <InputText labelValue={pmcID} onChangeText={(ID) => setPmcID(ID)} 
+            placeholderText={'PMC ID'} iconType={'stethoscope'}></InputText>
+
         </View>
         <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button}>
-                <Text style={[typo.Text_14pt,styles.buttonText]}>Login</Text>
+                <Text style={[typo.Text_14pt,styles.buttonText]}>Register</Text>
             </TouchableOpacity>
         </View>
         <View style={styles.signUpContainer}>
         <Text
         style={[typo.Text_14pt,styles.text]}>
-          Don't have an acount? 
+          Already a user?
           <Text style={styles.navButton} 
-          onPress={() => {navigation.navigate("SignUpScreen")}}> Create here</Text>
+          onPress={() => {navigation.navigate("SignInScreen")}}> Sign In here</Text>
       </Text>
       </View>
       <View style={styles.line}/>

@@ -25,7 +25,7 @@ const InputText = ({labelValue, placeholderText, iconType, ...rest}) => {
 const styles = StyleSheet.create({
   inputContainer: {
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 10,
     width: '80%',
     height: 65,
     borderColor: Colors.MonochromeGreen200,
