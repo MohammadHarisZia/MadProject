@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Typography from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/Colors';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
@@ -12,7 +12,7 @@ import SearchIcon from '../assets/Icons/Search.svg';
 
 import ComplaintCart from '../Components/ComplaintCart';
 
-const ComplaintDesk = ({navigation, route}) => {
+const ComplaintDesk = (props, {navigation, route}) => {
   return (
     <View style={styles.container}>
       <Heading></Heading>

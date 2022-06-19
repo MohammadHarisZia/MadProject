@@ -7,9 +7,8 @@ import LightTheme from './DesignSystem/LightTheme';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import Header from './Components/Header';
-import TextColors from './Screens/TextColors';
-import TextColors2 from './Screens/TextColors2';
 import ComplaintDesk from './Screens/ComplaintDesk';
+import DbOperations from './Screens/DbOperations';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -22,8 +21,6 @@ export default function App() {
       <Header></Header>
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="ComplaintDesk" component={ComplaintDesk} />
-        <Stack.Screen name="TextColors" component={TextColors} />
-        <Stack.Screen name="TextColors2" component={TextColors2} />
       </Stack.Navigator>
     </NavigationContainer>
   );
