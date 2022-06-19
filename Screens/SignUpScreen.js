@@ -11,7 +11,7 @@ import {
 
 import InputText from '../Components/InputText';
 import PakMedicLogo from '../assets/Icons/PakMedicLogo'
-import {Colors} from '../DesignSystem/Colors';
+import {Colors} from '../DesignSystem/AppColors';
 import typo from '../DesignSystem/Typography';
 import SocialBtn from '../Components/SocialsButton';
 import auth from '../firebase'
@@ -19,11 +19,12 @@ import auth from '../firebase'
 import {db} from '../firebase'
 // Initialize Firebase Authentication and get a reference to the service
 const SignInScreen = ({navigation}) => {
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
-    const [Cpassword, setCPassword] = useState();
-    const [phone, setPhone] = useState();
-    const [pmcID, setPmcID] = useState();
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [Cpassword, setCPassword] = useState("");
+    const [phone, setPhone] = useState("");
+    const [pmcID, setPmcID] = useState("");
 
     const SignUp= ()=>{
       auth.createUserWithEmailAndPassword(email, password)
@@ -31,6 +32,7 @@ const SignInScreen = ({navigation}) => {
         // Signed in 
         var user = userCredential.user;
        db.collection('users').doc(user.uid).set({
+          name: name,
           email: email,
           password: password,
           phone: phone,
@@ -55,8 +57,11 @@ return(
         <PakMedicLogo width={70} height={70}/>
         </View>
         <View>
+            <InputText labelValue={name} onChangeText={(userName) => setName(userName)} 
+            placeholderText={'Name'} iconType={'user'}></InputText>
+
             <InputText labelValue={email} onChangeText={(userEmail) => setEmail(userEmail)} 
-            placeholderText={'Email'} iconType={'user'}></InputText>
+            placeholderText={'Email'} iconType={'envelope'}></InputText>
 
             <InputText labelValue={password} onChangeText={(userPassword) => setPassword(userPassword)} 
             placeholderText={'Password'} iconType={'lock'} secureTextEntry={true}></InputText>

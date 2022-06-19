@@ -20,18 +20,16 @@ export default function App() {
   LogBox.ignoreLogs(["AsyncStorage has been extracted from react-native core and will be removed in a future release."]);
   const [user, setUser] = React.useState();
   
-  
-  const onAuthStateChange=(User) => {
-    if (User) {
-      console.log(User.uid," ",User.email);
-       setUser(User)
-    } else {
-      console.log('not logged in');
-    }
-  }
   React.useEffect(() => {
-     auth.onAuthStateChanged(onAuthStateChange);
-  }, []);
+     auth.onAuthStateChanged((User) => {
+      if (User) {
+        console.log(User.uid," ",User.email);
+         setUser(User)
+      } else {
+        console.log('not logged in');
+      }
+    })
+    }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>

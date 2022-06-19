@@ -11,7 +11,7 @@ import {
 
 import InputText from '../Components/InputText';
 import PakMedicLogo from '../assets/Icons/PakMedicLogo'
-import {Colors} from '../DesignSystem/Colors';
+import {Colors} from '../DesignSystem/AppColors';
 import typo from '../DesignSystem/Typography';
 import SocialBtn from '../Components/SocialsButton';
 import auth from '../firebase'

@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from '../DesignSystem/Typography';
-import {Colors} from '../DesignSystem/Colors';
+import {Colors} from '../DesignSystem/AppColors';
 import LightTheme from '../DesignSystem/LightTheme';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import PakMedicLogo from '../assets/Icons/PakMedicLogo';

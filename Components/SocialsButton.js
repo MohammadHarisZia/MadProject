@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Colors} from '../DesignSystem/Colors'
+import {Colors} from '../DesignSystem/AppColors'
 import typo from '../DesignSystem/Typography';
 
 const InputText = ({Color,SocialName, iconType,...rest}) => {

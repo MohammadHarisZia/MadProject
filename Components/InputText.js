@@ -2,7 +2,7 @@ import React from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Colors} from '../DesignSystem/Colors'
+import {Colors} from '../DesignSystem/AppColors'
 import typo from '../DesignSystem/Typography';
 
 const InputText = ({labelValue, placeholderText, iconType, ...rest}) => {
