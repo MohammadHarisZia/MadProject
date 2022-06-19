@@ -8,7 +8,6 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import Header from './Components/Header';
 import ComplaintDesk from './Screens/ComplaintDesk';
-import DbOperations from './Screens/DbOperations';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';

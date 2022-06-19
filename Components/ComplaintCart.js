@@ -1,13 +1,32 @@
 import React, {useState, useEffect} from 'react';
 import Typography from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/Colors';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Button,
+} from 'react-native';
+
+import {} from 'react-native-paper';
+
+import Modal from 'react-native-modal';
 
 import Options from '../assets/Icons/Options';
 import Circle from '../assets/Icons/Circle';
 
 const complaintCart = (props, {navigation, route}) => {
   const status = props.status;
+  let height = 200;
+
+  const [visible, setVisible] = useState(false);
+  const [complaintModal, setComplaintModal] = useState(false);
+
+  if (status === 'Reviewed') {
+    height = 150;
+  }
 
   return (
     <View>
@@ -17,7 +36,8 @@ const complaintCart = (props, {navigation, route}) => {
             width={50}
             height={50}
             fill={Colors.MonochromeBlue1000}
-            style={{alignSelf: 'flex-end', marginTop: -20}}></Options>
+            style={{alignSelf: 'flex-end', marginTop: -20}}
+            onPress={() => setVisible(true)}></Options>
         </TouchableOpacity>
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -90,6 +110,34 @@ const complaintCart = (props, {navigation, route}) => {
               </Text>
             </View>
           )}
+          <Modal
+            isVisible={visible}
+            onBackdropPress={() => {
+              setVisible(false);
+            }}
+            style={{margin: 0, justifyContent: 'flex-end'}}>
+            <View
+              style={{
+                height: height,
+                backgroundColor: 'white',
+                borderTopRightRadius: 10,
+                borderTopLeftRadius: 10,
+              }}>
+              <TouchableOpacity>
+                <Text style={[Typography.Header_20pt, styles.text]}>View</Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text style={[Typography.Header_20pt, styles.text]}>Edit</Text>
+              </TouchableOpacity>
+              {status !== 'Reviewed' && (
+                <TouchableOpacity>
+                  <Text style={[Typography.Header_20pt, styles.text]}>
+                    Delete
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </Modal>
         </View>
       </TouchableOpacity>
     </View>
@@ -111,6 +159,12 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Colors.MonochromeBlue1000,
+  },
+  modal: {},
+  text: {
+    color: Colors.MonochromeBlue1000,
+    textAlign: 'center',
+    margin: 20,
   },
 });
 
