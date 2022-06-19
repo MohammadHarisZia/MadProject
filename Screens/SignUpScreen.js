@@ -15,6 +15,8 @@ import {Colors} from '../DesignSystem/Colors';
 import typo from '../DesignSystem/Typography';
 import SocialBtn from '../Components/SocialsButton';
 import auth from '../firebase'
+
+import {db} from '../firebase'
 // Initialize Firebase Authentication and get a reference to the service
 const SignInScreen = ({navigation}) => {
     const [email, setEmail] = useState();
@@ -23,17 +25,27 @@ const SignInScreen = ({navigation}) => {
     const [phone, setPhone] = useState();
     const [pmcID, setPmcID] = useState();
 
-    const SignUp=()=>{
+    const SignUp= ()=>{
       auth.createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
+      .then(async(userCredential) => {
         // Signed in 
         var user = userCredential.user;
-        // ...
+       db.collection('users').doc(user.uid).set({
+          email: email,
+          password: password,
+          phone: phone,
+          pmcID: pmcID
+        }).then((docRef) => {
+          console.log("Document Added");
+      })
+      .catch((error) => {
+          console.error("Error adding document: ", error);
+      });
       })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
-        // ..
+        console.log(errorCode,errorMessage)
       });
     }
 

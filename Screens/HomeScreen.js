@@ -6,11 +6,11 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import PakMedicLogo from '../assets/Icons/PakMedicLogo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import Header from '../Components/Header';
+
 const HomeScreen = () => {
   return (
-    <View style={[styles.header, styles.flex]}>
-      <Text>Hello</Text>
-    </View>
+      <Header></Header>
   );
 };
 
