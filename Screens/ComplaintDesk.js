@@ -5,10 +5,9 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   TextInput,
-  Touchable,
+  FlatList,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {Picker} from '@react-native-picker/picker';
@@ -22,41 +21,91 @@ import SearchIcon from '../assets/Icons/Search.svg';
 
 import ComplaintCart from '../Components/ComplaintCart';
 
+import {db} from '../Firebase';
+import {ref, onValue, push, update, remove} from 'firebase/database';
+
 const ComplaintDesk = (props, {navigation, route}) => {
+  let complainees = [];
+  let complaints = [];
+  const [noOfComplaints, setNoOfComplaints] = useState(0);
+  const [complaintArray, setComplaintArray] = useState([]);
+  const [array, setArray] = useState([]);
   const [complaintModal, setComplaintModal] = useState(false);
   const [selectedValue, setSelectedValue] = useState('java');
   const [complaint, setComplaint] = useState('');
+  const [subject, setSubject] = useState('');
+
+  const renderItem = ({item}) => {
+    return (
+      <ComplaintCart
+        ticketID={item.ticketID}
+        complaint={item.complaint}
+        status={item.Status}></ComplaintCart>
+    );
+  };
+
+  function addNewComplaint() {
+    push(ref(db, '/complaints'), {
+      subject: subject,
+      complaint: complaint,
+      complainee: selectedValue,
+      Status: 'In Progress',
+      ticketID: noOfComplaints,
+    });
+    setNoOfComplaints(noOfComplaints + 1);
+    console.log('inserted');
+  }
+
+  useEffect(() => {
+    onValue(ref(db, '/complainees'), querySnapShot => {
+      let data = querySnapShot.val() || {};
+      Object.values(data).forEach(value => {
+        complainees.push(value.name);
+      });
+      setArray(complainees);
+    });
+
+    onValue(ref(db, '/complaints'), querySnapShot => {
+      complaints = [];
+      let data = querySnapShot.val() || {};
+      Object.values(data).forEach(value => {
+        complaints.push(value);
+      });
+      setComplaintArray(complaints);
+      setNoOfComplaints(Object.values(data).length + 1);
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
       <Heading></Heading>
       <ComplaintDeskBar></ComplaintDeskBar>
-      <AddMoreBtn
-        click={() => {
-          setComplaintModal(true);
-        }}></AddMoreBtn>
-      <ComplaintCart
-        ticketID={10}
-        complaint="I lost my dog and i hate it here"
-        status="On Hold"></ComplaintCart>
-      <ComplaintCart
-        ticketID={10}
-        complaint="I lost my dog and i hate it here"
-        status="Reviewed"></ComplaintCart>
-      <ComplaintCart
-        ticketID={10}
-        complaint="I lost my dog and i hate it here"
-        status="In Progress"></ComplaintCart>
+      {array.length !== 0 && (
+        <AddMoreBtn
+          click={() => {
+            setComplaintModal(true);
+          }}></AddMoreBtn>
+      )}
+
+      <FlatList
+        style={{height: 450}}
+        data={complaintArray}
+        renderItem={renderItem}
+      />
+
       <Modal
         isVisible={complaintModal}
         onBackdropPress={() => {
           setComplaintModal(false);
+          setSubject('');
+          setSelectedValue('');
+          setComplaint('');
         }}>
         <View
           style={{
             backgroundColor: 'white',
             borderRadius: 10,
-            height: 500,
+            height: 570,
           }}>
           <Text
             style={[
@@ -73,21 +122,14 @@ const ComplaintDesk = (props, {navigation, route}) => {
             Subject
           </Text>
 
-          <View style={styles.text}>
-            <Picker
-              selectedValue={selectedValue}
-              dropdownIconColor={Colors.MonochromeBlue1000}
-              color={Colors.MonochromeBlue1000}
-              style={{
-                color: 'black',
-              }}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedValue(itemValue)
-              }>
-              <Picker.Item label="Java" value="java" />
-              <Picker.Item label="JavaScript" value="js" />
-            </Picker>
-          </View>
+          <TextInput
+            style={[
+              styles.text,
+              {padding: 15, height: 50, textAlignVertical: 'top'},
+            ]}
+            value={subject}
+            onChangeText={setSubject}
+          />
 
           <Text
             style={[
@@ -113,7 +155,7 @@ const ComplaintDesk = (props, {navigation, route}) => {
             ]}>
             Complainee
           </Text>
-          <View style={styles.text}>
+          <View style={[styles.text, {height: 50}]}>
             <Picker
               selectedValue={selectedValue}
               dropdownIconColor={Colors.MonochromeBlue1000}
@@ -121,12 +163,80 @@ const ComplaintDesk = (props, {navigation, route}) => {
               style={{
                 color: 'black',
               }}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedValue(itemValue)
-              }>
-              <Picker.Item label="Java" value="java" />
-              <Picker.Item label="JavaScript" value="js" />
+              onValueChange={itemValue => setSelectedValue(itemValue)}>
+              <Picker.Item
+                value={'Select a Complainee'}
+                label={'Select a Complainee'}
+                key={0}
+              />
+              {array.map(item => {
+                return <Picker.Item value={item} label={item} key={item} />;
+              })}
             </Picker>
+          </View>
+          <View
+            style={{
+              marginLeft: 25,
+              width: 300,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <TouchableOpacity
+              style={{
+                marginTop: 10,
+                color: Colors.MonochromeBlue1000,
+                width: 130,
+                padding: 10,
+                borderRadius: 20,
+              }}
+              onPress={() => {
+                setComplaintModal(false);
+                setSubject('');
+                setSelectedValue('');
+                setComplaint('');
+              }}>
+              <Text
+                style={[
+                  {color: Colors.MonochromeBlue1000, textAlign: 'center'},
+                  Typography.Header_14pt,
+                ]}>
+                Cancel
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                marginTop: 10,
+                color: Colors.MonochromeBlue1000,
+                backgroundColor: Colors.Primary3,
+                width: 130,
+                padding: 10,
+                borderRadius: 20,
+              }}
+              onPress={() => {
+                if (
+                  subject === '' ||
+                  complaint === '' ||
+                  selectedValue === '' ||
+                  selectedValue === 'Select a Complainee'
+                )
+                  alert('Fields must not be empty, Insertion Failed');
+                else {
+                  addNewComplaint();
+                  setComplaintModal(false);
+                  setSubject('');
+                  setSelectedValue('');
+                  setComplaint('');
+                }
+              }}>
+              <Text
+                style={[
+                  {color: Colors.MonochromeBlue1000, textAlign: 'center'},
+                  Typography.Header_14pt,
+                ]}>
+                Submit
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -163,6 +273,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: 20,
     width: 300,
+    height: 40,
+    justifyContent: 'center',
     borderWidth: 2,
     borderRadius: 20,
     borderColor: Colors.MonochromeGreen500,

@@ -50,7 +50,11 @@ const complaintCart = (props, {navigation, route}) => {
               ]}>
               {props.complaint}
             </Text>
-            <Text style={[styles.text, Typography.Text_12pt, {margin: 5}]}>
+            <Text
+              style={[
+                Typography.Text_12pt,
+                {color: Colors.MonochromeBlue1000, margin: 5},
+              ]}>
               Ticket# {props.ticketID}
             </Text>
           </View>
@@ -60,13 +64,13 @@ const complaintCart = (props, {navigation, route}) => {
                 flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center',
-                marginRight: 15,
+                marginRight: -5,
               }}>
               <Circle
                 width={10}
                 height={10}
                 fill={Colors.Ascent1}
-                style={{marginRight: 5}}></Circle>
+                style={{marginRight: -10}}></Circle>
               <Text style={[styles.text, Typography.Header_14pt]}>
                 {props.status}
               </Text>
@@ -79,13 +83,13 @@ const complaintCart = (props, {navigation, route}) => {
                 flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center',
-                marginRight: 15,
+                marginRight: -5,
               }}>
               <Circle
                 width={10}
                 height={10}
                 fill={Colors.Primary1}
-                style={{marginRight: 5}}></Circle>
+                style={{marginRight: -10}}></Circle>
               <Text style={[styles.text, Typography.Header_14pt]}>
                 {props.status}
               </Text>
@@ -104,7 +108,7 @@ const complaintCart = (props, {navigation, route}) => {
                 width={10}
                 height={10}
                 fill={'#fcc419'}
-                style={{marginRight: 5}}></Circle>
+                style={{marginRight: -10}}></Circle>
               <Text style={[styles.text, Typography.Header_14pt]}>
                 {props.status}
               </Text>
@@ -124,14 +128,33 @@ const complaintCart = (props, {navigation, route}) => {
                 borderTopLeftRadius: 10,
               }}>
               <TouchableOpacity>
-                <Text style={[Typography.Header_20pt, styles.text]}>View</Text>
+                <Text
+                  style={[
+                    Typography.Header_20pt,
+                    styles.text,
+                    {textAlign: 'center'},
+                  ]}>
+                  View
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity>
-                <Text style={[Typography.Header_20pt, styles.text]}>Edit</Text>
+                <Text
+                  style={[
+                    Typography.Header_20pt,
+                    styles.text,
+                    {textAlign: 'center'},
+                  ]}>
+                  Edit
+                </Text>
               </TouchableOpacity>
               {status !== 'Reviewed' && (
                 <TouchableOpacity>
-                  <Text style={[Typography.Header_20pt, styles.text]}>
+                  <Text
+                    style={[
+                      Typography.Header_20pt,
+                      styles.text,
+                      {textAlign: 'center'},
+                    ]}>
                     Delete
                   </Text>
                 </TouchableOpacity>
@@ -159,11 +182,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Colors.MonochromeBlue1000,
-  },
-  modal: {},
-  text: {
-    color: Colors.MonochromeBlue1000,
-    textAlign: 'center',
     margin: 20,
   },
 });

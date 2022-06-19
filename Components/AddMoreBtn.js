@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btn: {
-    marginTop: 20,
+    marginVertical: 20,
     backgroundColor: Colors.Secondary3,
     paddingHorizontal: 20,
     paddingVertical: 5,
