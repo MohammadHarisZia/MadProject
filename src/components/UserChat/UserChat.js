@@ -1,17 +1,29 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 
 // local imports
 import {Colors} from '../../../DesignSystem/Colors';
 
 const UserChat = props => {
+  const navigation = useNavigation();
+
+  const openChat = () => {
+    navigation.navigate('Chat', {
+      user: props?.user,
+      defaultUser: props?.defaultUser,
+    });
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={openChat}>
       <View style={styles.chatContainer}>
-        {/* User information container to diplay username and the recent message */}
+        {/* User information container to diplay displayName and the recent message */}
         <View style={styles.userInfoContainer}>
           <Text style={styles.userName}>
-            {props?.username ? props?.username : 'Default user'}
+            {props?.user?.displayName
+              ? props?.user?.displayName
+              : 'Default user'}
           </Text>
           <Text style={styles.recentMessage}>
             {props?.recent ? props?.recent : 'This is a message'}
@@ -26,7 +38,7 @@ const UserChat = props => {
       </View>
 
       {/* Seperator */}
-    </View>
+    </TouchableOpacity>
   );
 };
 

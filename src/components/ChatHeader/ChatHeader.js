@@ -15,7 +15,7 @@ const ChatHeader = props => {
 
       {/* Receiver name */}
       <Text style={styles.receiver}>
-        {props?.recieverName ? props?.recieverName : 'default name'}
+        {props?.receiverName ? props?.receiverName : 'default name'}
       </Text>
 
       {/* Icons */}
