@@ -15,10 +15,27 @@ import {Colors} from '../DesignSystem/Colors';
 import typo from '../DesignSystem/Typography';
 import SocialBtn from '../Components/SocialsButton';
 
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
 
 const SignInScreen = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const auth = getAuth();
+
+
+  const SignIn = () => {
+    signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in 
+      const user = userCredential.user;
+      console.log(user.uid," ",user.email)
+      // ...
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+}
 
 return(
     <View style={styles.container}>
@@ -32,7 +49,7 @@ return(
             placeholderText={'Password'} iconType={'lock'} secureTextEntry={true}></InputText>
         </View>
         <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={()=>SignIn()}>
                 <Text style={[typo.Text_14pt,styles.buttonText]}>Login</Text>
             </TouchableOpacity>
         </View>
@@ -46,7 +63,7 @@ return(
       </View>
       <View style={styles.line}/>
       <View style={styles.SocialsContainer}>
-        <SocialBtn Color={"#E74C3C"} SocialName={"Google"} iconType={"google"}/>
+        <SocialBtn Color={"#E74C3C"} SocialName={"Google"} iconType={"google"} onPress={()=>{Google()}}/>
         <SocialBtn Color={"#2471A3"} SocialName={"Facebook"} iconType={"facebook-square"}/>
         <SocialBtn Color={"#5DADE2"} SocialName={"Twitter"} iconType={"twitter-square"}/>
 
