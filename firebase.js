@@ -1,7 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { GoogleAuthProvider } from "firebase/auth";
-
+import firebase from "firebase/app";
+import "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDTfUjXKybsOIg2bfGjZ0rshcOoJk8hY-M",
@@ -11,12 +9,14 @@ const firebaseConfig = {
     messagingSenderId: "277621475423",
     appId: "1:277621475423:web:cd851da7e3b9232b88b3ea"
   };
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+  
+  // Initialize Firebase
 
+  firebase.initializeApp(firebaseConfig)
+  
+  
+  // Initialize Firebase Authentication and get a reference to the service
+  const auth = firebase.auth();
+export default auth
 
 // Initialize Firebase Authentication and get a reference to the service
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-
-export default app;

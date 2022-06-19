@@ -14,27 +14,65 @@ import PakMedicLogo from '../assets/Icons/PakMedicLogo'
 import {Colors} from '../DesignSystem/Colors';
 import typo from '../DesignSystem/Typography';
 import SocialBtn from '../Components/SocialsButton';
+import auth from '../firebase'
+import firebase from "firebase/app"
+import "firebase/auth"
 
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-
+//import {signInWithEmailAndPassword } from "firebase/auth";
+//import {signInWithRedirect,GoogleAuthProvider,getRedirectResult,FacebookAuthProvider } from "firebase/auth";
 
 const SignInScreen = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const auth = getAuth();
 
 
   const SignIn = () => {
-    signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in 
-      const user = userCredential.user;
-      console.log(user.uid," ",user.email)
+    auth.signInWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+    // Signed in
+    var user = userCredential.user;
+    console.log(user.uid," ",user.email)
+    // ...
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+  });
+}
+
+const Social=(social)=>{
+  var provider
+  if(social==='google'){
+    provider = new firebase.auth.GoogleAuthProvider()
+  }else if(social==='facebook'){
+    provider= new firebase.auth.FacebookAuthProvider()
+  }
+auth.signInWithRedirect(provider);
+auth
+  .getRedirectResult()
+  .then((result) => {
+    if (result.credential) {
+      /** @type {auth.OAuthCredential} */
+      var credential = result.credential;
+
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = credential.accessToken;
       // ...
-    })
-    .catch((error) => {
-      console.log(error)
-    });
+    }
+    // The signed-in user info.
+    var user = result.user;
+    console.log(user.uid," ",user.email)
+  }).catch((error) => {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
+  });
+console.log("doesnt work lol")
 }
 
 return(
@@ -63,8 +101,8 @@ return(
       </View>
       <View style={styles.line}/>
       <View style={styles.SocialsContainer}>
-        <SocialBtn Color={"#E74C3C"} SocialName={"Google"} iconType={"google"} onPress={()=>{Google()}}/>
-        <SocialBtn Color={"#2471A3"} SocialName={"Facebook"} iconType={"facebook-square"}/>
+        <SocialBtn Color={"#E74C3C"} SocialName={"Google"} iconType={"google"} onPress={()=>{Social("google")}}/>
+        <SocialBtn Color={"#2471A3"} SocialName={"Facebook"} iconType={"facebook-square"} onPress={()=>{Social("facebook")}}/>
         <SocialBtn Color={"#5DADE2"} SocialName={"Twitter"} iconType={"twitter-square"}/>
 
       </View>

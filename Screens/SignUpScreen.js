@@ -14,31 +14,27 @@ import PakMedicLogo from '../assets/Icons/PakMedicLogo'
 import {Colors} from '../DesignSystem/Colors';
 import typo from '../DesignSystem/Typography';
 import SocialBtn from '../Components/SocialsButton';
-import firebase from '../firebase'
+import auth from '../firebase'
 // Initialize Firebase Authentication and get a reference to the service
-
-import { getAuth,createUserWithEmailAndPassword } from "firebase/auth";
-
 const SignInScreen = ({navigation}) => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [Cpassword, setCPassword] = useState();
     const [phone, setPhone] = useState();
     const [pmcID, setPmcID] = useState();
-    const auth = getAuth();
 
     const SignUp=()=>{
-        console.log("i was pressed")
-        createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // Signed in 
-    const user = userCredential.user;
-    console.log(user.uid,user.email)
-    // ...
-  })
-  .catch((error) => {
-    console.log(error)
-  });
+      auth.createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed in 
+        var user = userCredential.user;
+        // ...
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ..
+      });
     }
 
 return(
