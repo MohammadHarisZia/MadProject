@@ -19,6 +19,7 @@ const firebaseConfig = {
   const auth = firebase.auth();
 
   var db = firebase.firestore()
+  db.settings({ experimentalForceLongPolling: true });
   export {db}
 export default auth
 

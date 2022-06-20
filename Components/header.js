@@ -1,10 +1,12 @@
 import React from 'react';
 import Typography from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/AppColors';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {BackHandler,View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import PakMedicLogo from '../assets/Icons/PakMedicLogo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import auth from '../firebase'
+
+import { AuthContext } from './context';
 
 import { DefaultTheme, Menu, Divider, Provider } from 'react-native-paper';
 
@@ -13,6 +15,8 @@ const Header = () => {
 
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
+  const { signOut } = React.useContext(AuthContext);
+
 
   return (
     <Provider theme={DefaultTheme}>
@@ -38,9 +42,9 @@ const Header = () => {
           anchor={<Icon name="user" size={30} color={Colors.MonochromeBlue900} style={{marginRight:10}} onPress={openMenu}/>}>
           <Menu.Item onPress={() => {}} title="Profile" />
           <Divider />
-          <Menu.Item onPress={() => {auth.signOut()}} title="Logout" />
+          <Menu.Item onPress={() => {auth.signOut(); signOut()}} title="Logout" />
           <Divider />
-          <Menu.Item onPress={() => {}} title="Exit" />
+          <Menu.Item onPress={() => {BackHandler.exitApp()}} title="Exit" />
         </Menu>
       
       </TouchableOpacity>

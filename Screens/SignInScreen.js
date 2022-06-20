@@ -18,21 +18,22 @@ import auth from '../firebase'
 import firebase from "firebase/app"
 import "firebase/auth"
 
+import { AuthContext } from '../Components/context';
+
 //import {signInWithEmailAndPassword } from "firebase/auth";
 //import {signInWithRedirect,GoogleAuthProvider,getRedirectResult,FacebookAuthProvider } from "firebase/auth";
 
 const SignInScreen = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-
+  const { signIn } = React.useContext(AuthContext);
 
   const SignIn = () => {
     auth.signInWithEmailAndPassword(email, password)
   .then((userCredential) => {
     // Signed in
     var user = userCredential.user;
-    console.log(user.uid," ",user.email)
-    // ...
+    signIn(user);
   })
   .catch((error) => {
     var errorCode = error.code;

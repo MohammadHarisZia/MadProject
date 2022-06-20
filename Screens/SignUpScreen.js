@@ -15,6 +15,7 @@ import {Colors} from '../DesignSystem/AppColors';
 import typo from '../DesignSystem/Typography';
 import SocialBtn from '../Components/SocialsButton';
 import auth from '../firebase'
+import { AuthContext } from '../Components/context';
 
 import {db} from '../firebase'
 // Initialize Firebase Authentication and get a reference to the service
@@ -25,12 +26,14 @@ const SignInScreen = ({navigation}) => {
     const [Cpassword, setCPassword] = useState("");
     const [phone, setPhone] = useState("");
     const [pmcID, setPmcID] = useState("");
+    const { signUp } = React.useContext(AuthContext);
 
     const SignUp= ()=>{
       auth.createUserWithEmailAndPassword(email, password)
       .then(async(userCredential) => {
         // Signed in 
         var user = userCredential.user;
+
        db.collection('users').doc(user.uid).set({
           name: name,
           email: email,
@@ -39,6 +42,7 @@ const SignInScreen = ({navigation}) => {
           pmcID: pmcID
         }).then((docRef) => {
           console.log("Document Added");
+          signUp(user);
       })
       .catch((error) => {
           console.error("Error adding document: ", error);
