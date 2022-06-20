@@ -20,7 +20,7 @@ import Circle from '../assets/Icons/Circle';
 import {db} from '../Firebase';
 import {ref, onValue, push, update, remove} from 'firebase/database';
 
-const complaintCart = (props, {navigation, route}) => {
+const complaintCart = props => {
   const status = props.status;
   let color = '';
 
@@ -31,7 +31,6 @@ const complaintCart = (props, {navigation, route}) => {
   let height = 200;
 
   const [visible, setVisible] = useState(false);
-  const [complaintModal, setComplaintModal] = useState(false);
 
   if (status === 'Reviewed') {
     height = 150;
@@ -39,14 +38,6 @@ const complaintCart = (props, {navigation, route}) => {
 
   const deleteItem = () => {
     remove(ref(db, `/complaints/${props.delKey}`));
-  };
-
-  const updateItem = () => {
-    update(ref(db, `/complaints/`), {
-      [props.delKey]: {
-        Status: 'In Progress',
-      },
-    });
   };
 
   return (
@@ -69,7 +60,7 @@ const complaintCart = (props, {navigation, route}) => {
                 Typography.Header_14pt,
                 {margin: 5, marginTop: -20, width: 180},
               ]}>
-              {props.complaint}
+              {props.subject}
             </Text>
             <Text
               style={[
@@ -122,6 +113,13 @@ const complaintCart = (props, {navigation, route}) => {
               <TouchableOpacity
                 onPress={() => {
                   setVisible(false);
+                  props.modalmethod(true);
+                  props.isEditable(true);
+                  props.setComplainee(props.complainee);
+                  props.setSubject(props.subject);
+                  props.setComplaint(props.complaint);
+                  props.setKey(props.delKey);
+                  props.setTicketID(props.ticketID);
                 }}>
                 <Text
                   style={[

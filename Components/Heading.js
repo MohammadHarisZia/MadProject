@@ -5,15 +5,21 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 import BackBtn from '../assets/Icons/BackBtn.svg';
 
-const Heading = ({navigation, route}) => {
+import TextColors2 from '../Screens/TextColors2';
+
+const Heading = props => {
+  console.log(props.navigate);
   return (
     <View style={styles.flex}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          props.navigation.navigate(props.navigate);
+        }}>
         <BackBtn width={40} height={40} fill={Colors.Secondary1} />
       </TouchableOpacity>
 
       <Text style={[Typography.Header_20pt, styles.heading]}>
-        ComplaintDesk
+        {props.title}
       </Text>
     </View>
   );

@@ -3,13 +3,13 @@ import Typography from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/Colors';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
-const TextColors2 = ({navigation, route}) => {
+const TextColors2 = props => {
   return (
     <View>
       <TouchableOpacity
         style={styles.flex}
         onPress={() => {
-          navigation.navigate('TextColors');
+          props.navigation.navigate('ComplaintDesk');
         }}>
         <Text style={[Typography.Header_24pt, {color: Colors.Primary1}]}>
           Hello

@@ -8,18 +8,28 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import Header from './Components/Header';
 import ComplaintDesk from './Screens/ComplaintDesk';
+import TextColors2 from './Screens/TextColors2';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
-export default function App() {
+export default function App({route, navigation}) {
   return (
     <NavigationContainer>
       <Header></Header>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="ComplaintDesk" component={ComplaintDesk} />
+        <Stack.Screen
+          name="TextColors2"
+          component={TextColors2}
+          navigation={navigation}
+        />
+        <Stack.Screen
+          name="ComplaintDesk"
+          component={ComplaintDesk}
+          navigation={navigation}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -19,9 +19,9 @@ import AddMoreBtn from '../Components/AddMoreBtn';
 import ComplaintCart from '../Components/ComplaintCart';
 
 import {db} from '../Firebase';
-import {ref, onValue, push, update, remove} from 'firebase/database';
+import {ref, onValue, push, update, remove, query} from 'firebase/database';
 
-const ComplaintDesk = (props, {navigation, route}) => {
+const ComplaintDesk = props => {
   let complainees = [];
   let complaints = [];
   const [noOfComplaints, setNoOfComplaints] = useState(0);
@@ -32,6 +32,8 @@ const ComplaintDesk = (props, {navigation, route}) => {
   const [complaint, setComplaint] = useState('');
   const [subject, setSubject] = useState('');
   const [isEditable, setIsEditable] = useState(false);
+  const [key, setKey] = useState('');
+  const [ticketID, setTicketID] = useState('');
 
   const modal = title => {
     return (
@@ -42,6 +44,9 @@ const ComplaintDesk = (props, {navigation, route}) => {
           setSubject('');
           setSelectedValue('');
           setComplaint('');
+          setIsEditable(false);
+          setKey('');
+          setTicketID('');
         }}>
         <View
           style={{
@@ -136,6 +141,10 @@ const ComplaintDesk = (props, {navigation, route}) => {
                 setSubject('');
                 setSelectedValue('');
                 setComplaint('');
+                setTicketID('');
+                setIsEditable(false);
+                setTicketID('');
+                setKey('');
               }}>
               <Text
                 style={[
@@ -163,12 +172,22 @@ const ComplaintDesk = (props, {navigation, route}) => {
                   selectedValue === 'Select a Complainee'
                 )
                   alert('Fields must not be empty, Insertion Failed');
-                else {
+                else if (!isEditable) {
                   addNewComplaint();
                   setComplaintModal(false);
                   setSubject('');
                   setSelectedValue('');
                   setComplaint('');
+                  setKey('');
+                  setTicketID('');
+                } else if (isEditable) {
+                  updateComplaint();
+                  setComplaintModal(false);
+                  setSubject('');
+                  setSelectedValue('');
+                  setComplaint('');
+                  setKey('');
+                  setTicketID('');
                 }
               }}>
               <Text
@@ -191,7 +210,16 @@ const ComplaintDesk = (props, {navigation, route}) => {
         ticketID={item.value.ticketID}
         complaint={item.value.complaint}
         status={item.value.Status}
-        delKey={item.key}></ComplaintCart>
+        subject={item.value.subject}
+        complainee={item.value.complainee}
+        delKey={item.key}
+        modalmethod={setComplaintModal}
+        isEditable={setIsEditable}
+        setComplaint={setComplaint}
+        setComplainee={setSelectedValue}
+        setSubject={setSubject}
+        setKey={setKey}
+        setTicketID={setTicketID}></ComplaintCart>
     );
   };
 
@@ -207,6 +235,20 @@ const ComplaintDesk = (props, {navigation, route}) => {
     console.log('inserted');
   }
 
+  const updateComplaint = () => {
+    console.log(key);
+    update(ref(db, `/complaints/`), {
+      [key]: {
+        subject: subject,
+        complaint: complaint,
+        complainee: selectedValue,
+        Status: 'In Progress',
+        ticketID: ticketID,
+      },
+    });
+    setIsEditable(false);
+  };
+
   useEffect(() => {
     onValue(ref(db, '/complainees'), querySnapShot => {
       let data = querySnapShot.val() || {};
@@ -219,9 +261,6 @@ const ComplaintDesk = (props, {navigation, route}) => {
     onValue(ref(db, '/complaints'), querySnapShot => {
       complaints = [];
       let data = querySnapShot.val() || {};
-      // Object.values(data).forEach(value => {
-      //   complaints.push(value);
-      // });
       for (var key in data) {
         complaints.push({key: key, value: data[key]});
       }
@@ -232,7 +271,10 @@ const ComplaintDesk = (props, {navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <Heading></Heading>
+      <Heading
+        title="ComplaintDesk"
+        navigation={props.navigation}
+        navigate="TextColors2"></Heading>
       <ComplaintDeskBar></ComplaintDeskBar>
       {array.length !== 0 && (
         <AddMoreBtn
@@ -248,7 +290,8 @@ const ComplaintDesk = (props, {navigation, route}) => {
           keyExtractor={item => item.key}
         />
       )}
-      {modal((title = 'Submit'))}
+      {(!isEditable && modal((title = 'Submit'))) ||
+        (isEditable && modal((title = 'Update')))}
     </View>
   );
 };
