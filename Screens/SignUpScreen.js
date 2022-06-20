@@ -59,9 +59,10 @@ const SignInScreen = ({navigation}) => {
     }
 
 return(
+  <ScrollView>
     <View style={styles.container}>
         <View style={styles.logoContainer}>
-        <PakMedicLogo width={70} height={70}/>
+        <PakMedicLogo width={70} height={70} style={{margin:10}}/>
         </View>
         <View>
             <InputText labelValue={name} onChangeText={(userName) => setName(userName)} 
@@ -104,6 +105,7 @@ return(
 
       </View>
     </View>
+    </ScrollView>
 )}
 const styles = StyleSheet.create({
   container: {

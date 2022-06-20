@@ -8,10 +8,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Header from '../Components/Header';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   return (
     <>
-    <Header/>
+    <Header navigation={navigation}/>
     <View style={styles.flex}>
     <Text style={{color:"black"}}>Home</Text>
     </View>

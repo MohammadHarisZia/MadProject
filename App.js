@@ -7,6 +7,7 @@ import {ActivityIndicator,View, Text, StyleSheet, TouchableOpacity} from 'react-
 import SignInScreen from './Screens/SignInScreen';
 import SignUpScreen from './Screens/SignUpScreen';
 import TabStack from './Screens/TabStack';
+import ProfileScreen from './Screens/ProfileScreen';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -71,7 +72,7 @@ export default function App() {
     (
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="TabStack" component={TabStack} />
-        {/* <Stack.Screen name="Profile" component={Profile}/> */}
+        <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
       </Stack.Navigator>
       ): (
         <Stack.Navigator screenOptions={{headerShown: false}}>

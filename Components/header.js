@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/AppColors';
-import {BackHandler,View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {BackHandler,View, Text, StyleSheet, Image, TouchableOpacity, Alert} from 'react-native';
 import PakMedicLogo from '../assets/Icons/PakMedicLogo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 //import auth from '../firebase'
@@ -14,7 +14,7 @@ import { AuthContext } from './context';
 
 import { DefaultTheme, Menu, Divider, Provider } from 'react-native-paper';
 
-const Header = () => {
+const Header = ({navigation}) => {
   const [visible, setVisible] = React.useState(false);
 
   const openMenu = () => setVisible(true);
@@ -23,7 +23,7 @@ const Header = () => {
 
 
   return (
-    <Provider theme={DefaultTheme}>
+    <Provider theme={DefaultTheme} style={styles.prov}>
     <View style={[styles.header, styles.flex]}>
       <View style={[styles.flex]}>
         <PakMedicLogo
@@ -44,7 +44,15 @@ const Header = () => {
           visible={visible}
           onDismiss={closeMenu}
           anchor={<Icon name="user" size={30} color={Colors.MonochromeBlue900} style={{marginRight:10}} onPress={openMenu}/>}>
-          <Menu.Item onPress={() => {}} title="Profile" />
+          <Menu.Item onPress={() => {
+            if(navigation!=null){
+            navigation.navigate("ProfileScreen")
+            closeMenu()
+            }
+            else{
+              Alert.alert(" Already on Profile Screen")
+            }
+          }} title="Profile" />
           <Divider />
           <Menu.Item onPress={() => {
             if(Auth().currentUser.displayName!==""){
@@ -70,6 +78,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
+    //position:"absolute",
+    width:"100%",
     backgroundColor: Colors.Primary1,
     paddingVertical: 10,
   },
