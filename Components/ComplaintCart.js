@@ -17,8 +17,17 @@ import Modal from 'react-native-modal';
 import Options from '../assets/Icons/Options';
 import Circle from '../assets/Icons/Circle';
 
+import {db} from '../Firebase';
+import {ref, onValue, push, update, remove} from 'firebase/database';
+
 const complaintCart = (props, {navigation, route}) => {
   const status = props.status;
+  let color = '';
+
+  if (status === 'Reviewed') color = Colors.Primary1;
+  if (status === 'In Progress') color = '#fcc419';
+  if (status === 'On Hold') color = Colors.Ascent1;
+
   let height = 200;
 
   const [visible, setVisible] = useState(false);
@@ -28,9 +37,21 @@ const complaintCart = (props, {navigation, route}) => {
     height = 150;
   }
 
+  const deleteItem = () => {
+    remove(ref(db, `/complaints/${props.delKey}`));
+  };
+
+  const updateItem = () => {
+    update(ref(db, `/complaints/`), {
+      [props.delKey]: {
+        Status: 'In Progress',
+      },
+    });
+  };
+
   return (
     <View>
-      <TouchableOpacity View style={styles.container}>
+      <TouchableOpacity View style={styles.container} onPress={() => {}}>
         <TouchableOpacity>
           <Options
             width={50}
@@ -58,62 +79,23 @@ const complaintCart = (props, {navigation, route}) => {
               Ticket# {props.ticketID}
             </Text>
           </View>
-          {props.status === 'On Hold' && (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginRight: -5,
-              }}>
-              <Circle
-                width={10}
-                height={10}
-                fill={Colors.Ascent1}
-                style={{marginRight: -10}}></Circle>
-              <Text style={[styles.text, Typography.Header_14pt]}>
-                {props.status}
-              </Text>
-            </View>
-          )}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginRight: -5,
+            }}>
+            <Circle
+              width={10}
+              height={10}
+              fill={color}
+              style={{marginRight: -10}}></Circle>
+            <Text style={[styles.text, Typography.Header_14pt]}>
+              {props.status}
+            </Text>
+          </View>
 
-          {props.status === 'Reviewed' && (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginRight: -5,
-              }}>
-              <Circle
-                width={10}
-                height={10}
-                fill={Colors.Primary1}
-                style={{marginRight: -10}}></Circle>
-              <Text style={[styles.text, Typography.Header_14pt]}>
-                {props.status}
-              </Text>
-            </View>
-          )}
-
-          {props.status === 'In Progress' && (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginRight: 15,
-              }}>
-              <Circle
-                width={10}
-                height={10}
-                fill={'#fcc419'}
-                style={{marginRight: -10}}></Circle>
-              <Text style={[styles.text, Typography.Header_14pt]}>
-                {props.status}
-              </Text>
-            </View>
-          )}
           <Modal
             isVisible={visible}
             onBackdropPress={() => {
@@ -137,7 +119,10 @@ const complaintCart = (props, {navigation, route}) => {
                   View
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setVisible(false);
+                }}>
                 <Text
                   style={[
                     Typography.Header_20pt,
@@ -148,7 +133,10 @@ const complaintCart = (props, {navigation, route}) => {
                 </Text>
               </TouchableOpacity>
               {status !== 'Reviewed' && (
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    deleteItem();
+                  }}>
                   <Text
                     style={[
                       Typography.Header_20pt,

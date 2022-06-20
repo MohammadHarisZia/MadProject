@@ -16,9 +16,6 @@ import Heading from '../Components/Heading';
 import ComplaintDeskBar from '../Components/ComplaintDeskBar';
 import AddMoreBtn from '../Components/AddMoreBtn';
 
-import DropDown from '../assets/Icons/DropDown.svg';
-import SearchIcon from '../assets/Icons/Search.svg';
-
 import ComplaintCart from '../Components/ComplaintCart';
 
 import {db} from '../Firebase';
@@ -34,65 +31,10 @@ const ComplaintDesk = (props, {navigation, route}) => {
   const [selectedValue, setSelectedValue] = useState('java');
   const [complaint, setComplaint] = useState('');
   const [subject, setSubject] = useState('');
+  const [isEditable, setIsEditable] = useState(false);
 
-  const renderItem = ({item}) => {
+  const modal = title => {
     return (
-      <ComplaintCart
-        ticketID={item.ticketID}
-        complaint={item.complaint}
-        status={item.Status}></ComplaintCart>
-    );
-  };
-
-  function addNewComplaint() {
-    push(ref(db, '/complaints'), {
-      subject: subject,
-      complaint: complaint,
-      complainee: selectedValue,
-      Status: 'In Progress',
-      ticketID: noOfComplaints,
-    });
-    setNoOfComplaints(noOfComplaints + 1);
-    console.log('inserted');
-  }
-
-  useEffect(() => {
-    onValue(ref(db, '/complainees'), querySnapShot => {
-      let data = querySnapShot.val() || {};
-      Object.values(data).forEach(value => {
-        complainees.push(value.name);
-      });
-      setArray(complainees);
-    });
-
-    onValue(ref(db, '/complaints'), querySnapShot => {
-      complaints = [];
-      let data = querySnapShot.val() || {};
-      Object.values(data).forEach(value => {
-        complaints.push(value);
-      });
-      setComplaintArray(complaints);
-      setNoOfComplaints(Object.values(data).length + 1);
-    });
-  }, []);
-
-  return (
-    <View style={styles.container}>
-      <Heading></Heading>
-      <ComplaintDeskBar></ComplaintDeskBar>
-      {array.length !== 0 && (
-        <AddMoreBtn
-          click={() => {
-            setComplaintModal(true);
-          }}></AddMoreBtn>
-      )}
-
-      <FlatList
-        style={{height: 450}}
-        data={complaintArray}
-        renderItem={renderItem}
-      />
-
       <Modal
         isVisible={complaintModal}
         onBackdropPress={() => {
@@ -234,12 +176,79 @@ const ComplaintDesk = (props, {navigation, route}) => {
                   {color: Colors.MonochromeBlue1000, textAlign: 'center'},
                   Typography.Header_14pt,
                 ]}>
-                Submit
+                {title}
               </Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
+    );
+  };
+
+  const renderItem = ({item}) => {
+    return (
+      <ComplaintCart
+        ticketID={item.value.ticketID}
+        complaint={item.value.complaint}
+        status={item.value.Status}
+        delKey={item.key}></ComplaintCart>
+    );
+  };
+
+  function addNewComplaint() {
+    push(ref(db, '/complaints'), {
+      subject: subject,
+      complaint: complaint,
+      complainee: selectedValue,
+      Status: 'In Progress',
+      ticketID: noOfComplaints,
+    });
+    setNoOfComplaints(noOfComplaints + 1);
+    console.log('inserted');
+  }
+
+  useEffect(() => {
+    onValue(ref(db, '/complainees'), querySnapShot => {
+      let data = querySnapShot.val() || {};
+      Object.values(data).forEach(value => {
+        complainees.push(value.name);
+      });
+      setArray(complainees);
+    });
+
+    onValue(ref(db, '/complaints'), querySnapShot => {
+      complaints = [];
+      let data = querySnapShot.val() || {};
+      // Object.values(data).forEach(value => {
+      //   complaints.push(value);
+      // });
+      for (var key in data) {
+        complaints.push({key: key, value: data[key]});
+      }
+      setComplaintArray(complaints);
+      setNoOfComplaints(Object.values(data).length + 1);
+    });
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <Heading></Heading>
+      <ComplaintDeskBar></ComplaintDeskBar>
+      {array.length !== 0 && (
+        <AddMoreBtn
+          click={() => {
+            setComplaintModal(true);
+          }}></AddMoreBtn>
+      )}
+      {complaintArray.length !== 0 && (
+        <FlatList
+          style={{height: 450}}
+          data={complaintArray}
+          renderItem={renderItem}
+          keyExtractor={item => item.key}
+        />
+      )}
+      {modal((title = 'Submit'))}
     </View>
   );
 };
