@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: Colors.Primary1,
     paddingVertical: 10,
-    height: 60,
   },
 });
 

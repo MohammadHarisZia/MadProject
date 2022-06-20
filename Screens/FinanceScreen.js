@@ -8,24 +8,25 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Header from '../Components/Header';
 
-const HomeScreen = () => {
+const FinanceScreen = ({navigation}) => {
   return (
     <>
     <Header/>
     <View style={styles.flex}>
-    <Text style={{color:"black"}}>Home</Text>
+    <Text style={{color:"black"}}>Finance</Text>
     </View>
     </>
+      
   );
 };
 
 const styles = StyleSheet.create({
-  flex: {
-    height:"100%",
-    width:"100%",
-    flex:1,
-    alignItems: 'center',
-  },
+    flex: {
+        height:"100%",
+        width:"100%",
+        flex:1,
+        alignItems: 'center',
+      },
 });
 
-export default HomeScreen;
+export default FinanceScreen;
