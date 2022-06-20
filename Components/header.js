@@ -4,7 +4,11 @@ import {Colors} from '../DesignSystem/AppColors';
 import {BackHandler,View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import PakMedicLogo from '../assets/Icons/PakMedicLogo';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import auth from '../firebase'
+//import auth from '../firebase'
+
+import Auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
 
 import { AuthContext } from './context';
 
@@ -42,7 +46,13 @@ const Header = () => {
           anchor={<Icon name="user" size={30} color={Colors.MonochromeBlue900} style={{marginRight:10}} onPress={openMenu}/>}>
           <Menu.Item onPress={() => {}} title="Profile" />
           <Divider />
-          <Menu.Item onPress={() => {auth.signOut(); signOut()}} title="Logout" />
+          <Menu.Item onPress={() => {
+            if(Auth().currentUser.displayName!==""){
+              GoogleSignin.signOut();
+            }else{
+              Auth().signOut();
+            }
+            signOut()}} title="Logout" />
           <Divider />
           <Menu.Item onPress={() => {BackHandler.exitApp()}} title="Exit" />
         </Menu>

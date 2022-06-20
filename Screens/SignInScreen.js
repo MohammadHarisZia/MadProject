@@ -14,9 +14,18 @@ import PakMedicLogo from '../assets/Icons/PakMedicLogo'
 import {Colors} from '../DesignSystem/AppColors';
 import typo from '../DesignSystem/Typography';
 import SocialBtn from '../Components/SocialsButton';
-import auth from '../firebase'
-import firebase from "firebase/app"
-import "firebase/auth"
+//import auth from '../firebase'
+//import firebase from "firebase/app"
+//import "firebase/auth"
+
+import Auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+GoogleSignin.configure({
+  webClientId: '277621475423-99dlgq4157obgjtjmiuu9lf4h369m6s9.apps.googleusercontent.com',
+});
 
 import { AuthContext } from '../Components/context';
 
@@ -29,51 +38,88 @@ const SignInScreen = ({navigation}) => {
   const { signIn } = React.useContext(AuthContext);
 
   const SignIn = () => {
-    auth.signInWithEmailAndPassword(email, password)
+    Auth().signInWithEmailAndPassword(email, password)
   .then((userCredential) => {
     // Signed in
     var user = userCredential.user;
-    signIn(user);
+    signIn(user.uid);
+    
   })
   .catch((error) => {
     var errorCode = error.code;
     var errorMessage = error.message;
+    console.log(errorCode,errorMessage);
   });
 }
 
-const Social=(social)=>{
-  var provider
-  if(social==='google'){
-    provider = new firebase.auth.GoogleAuthProvider()
-  }else if(social==='facebook'){
-    provider= new firebase.auth.FacebookAuthProvider()
-  }
-auth.signInWithRedirect(provider);
-auth
-  .getRedirectResult()
-  .then((result) => {
-    if (result.credential) {
-      /** @type {auth.OAuthCredential} */
-      var credential = result.credential;
+// const Social=(social)=>{
+//   var provider
+//   if(social==='google'){
+//     provider = new firebase.auth.GoogleAuthProvider()
+//   }else if(social==='facebook'){
+//     provider= new firebase.auth.FacebookAuthProvider()
+//   }
+// auth.signInWithRedirect(provider);
+// auth
+//   .getRedirectResult()
+//   .then((result) => {
+//     if (result.credential) {
+//       /** @type {auth.OAuthCredential} */
+//       var credential = result.credential;
 
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      var token = credential.accessToken;
-      // ...
-    }
-    // The signed-in user info.
-    var user = result.user;
-    console.log(user.uid," ",user.email)
-  }).catch((error) => {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // The email of the user's account used.
-    var email = error.email;
-    // The firebase.auth.AuthCredential type that was used.
-    var credential = error.credential;
-    // ...
+//       // This gives you a Google Access Token. You can use it to access the Google API.
+//       var token = credential.accessToken;
+//       // ...
+//     }
+//     // The signed-in user info.
+//     var user = result.user;
+//     console.log(user.uid," ",user.email)
+//   }).catch((error) => {
+//     // Handle Errors here.
+//     var errorCode = error.code;
+//     var errorMessage = error.message;
+//     // The email of the user's account used.
+//     var email = error.email;
+//     // The firebase.auth.AuthCredential type that was used.
+//     var credential = error.credential;
+//     // ...
+//   });
+// console.log("doesnt work lol")
+// }
+
+const onGoogleButtonPress=async() =>{
+
+  try{
+  // Get the users ID token
+  const { idToken } = await GoogleSignin.signIn();
+
+  // Create a Google credential with the token
+  const googleCredential = Auth.GoogleAuthProvider.credential(idToken);
+
+  // Sign-in the user with the credential
+  Auth().signInWithCredential(googleCredential).then(async userCredential => {
+    
+    let user = userCredential.user;
+
+    firestore().collection('users').doc(user.uid).set({
+      name: user.displayName,
+      email: user.email,
+      password: "",
+      phone: "",
+      pmcID: ""
+    }).then((docRef) => {
+      console.log("Document Added");
+      console.log(user.uid)
+      signIn(user.uid);
+  })
+  .catch((error) => {
+      console.error("Error adding document: ", error);
   });
-console.log("doesnt work lol")
+  })  
+  .catch(error => {
+    console.log(error);
+  })
+  }catch(error){console.log(error)}
 }
 
 return(
@@ -102,8 +148,8 @@ return(
       </View>
       <View style={styles.line}/>
       <View style={styles.SocialsContainer}>
-        <SocialBtn Color={"#E74C3C"} SocialName={"Google"} iconType={"google"} onPress={()=>{Social("google")}}/>
-        <SocialBtn Color={"#2471A3"} SocialName={"Facebook"} iconType={"facebook-square"} onPress={()=>{Social("facebook")}}/>
+        <SocialBtn Color={"#E74C3C"} SocialName={"Google"} iconType={"google"} onPress={()=>{onGoogleButtonPress()}}/>
+        <SocialBtn Color={"#2471A3"} SocialName={"Facebook"} iconType={"facebook-square"} onPress={()=>{}}/>
         <SocialBtn Color={"#5DADE2"} SocialName={"Twitter"} iconType={"twitter-square"}/>
 
       </View>

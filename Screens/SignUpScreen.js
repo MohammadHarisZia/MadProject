@@ -17,7 +17,10 @@ import SocialBtn from '../Components/SocialsButton';
 import auth from '../firebase'
 import { AuthContext } from '../Components/context';
 
-import {db} from '../firebase'
+import Auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+
+//import {db} from '../firebase'
 // Initialize Firebase Authentication and get a reference to the service
 const SignInScreen = ({navigation}) => {
     const [name, setName] = useState("");
@@ -29,19 +32,19 @@ const SignInScreen = ({navigation}) => {
     const { signUp } = React.useContext(AuthContext);
 
     const SignUp= ()=>{
-      auth.createUserWithEmailAndPassword(email, password)
+      Auth().createUserWithEmailAndPassword(email, password)
       .then(async(userCredential) => {
         // Signed in 
         var user = userCredential.user;
 
-       db.collection('users').doc(user.uid).set({
+       firestore().collection('users').doc(user.uid).set({
           name: name,
           email: email,
           password: password,
           phone: phone,
           pmcID: pmcID
-        }).then((docRef) => {
-          console.log("Document Added");
+        },{ merge: true }).then((docRef) => {
+          console.log("Document Added with id: ", docRef.id);
           signUp(user);
       })
       .catch((error) => {
