@@ -37,8 +37,8 @@ const complaintCart = props => {
     height = 150;
   }
 
-  const deleteItem = () => {
-    firestore()
+  const deleteItem = async () => {
+    await firestore()
       .collection('complaints')
       .doc(props.delKey)
       .delete()
@@ -46,6 +46,7 @@ const complaintCart = props => {
         console.log('User deleted!');
       });
     props.setUpdateDB(true);
+    props.setSearchDB(false);
     setVisible(false);
   };
 
@@ -125,6 +126,10 @@ const complaintCart = props => {
                 onPress={() => {
                   props.navigation.navigate('ViewComplaint', {
                     ticketID: props.ticketID,
+                    subject: props.subject,
+                    status: props.status,
+                    complaint: props.complaint,
+                    complainee: props.complainee,
                   });
                 }}
               />
@@ -139,6 +144,7 @@ const complaintCart = props => {
                   props.setSubject(props.subject);
                   props.setComplaint(props.complaint);
                   props.setKey(props.delKey);
+                  props.setStatus(props.status);
                   props.setTicketID(props.ticketID);
                 }}
               />

@@ -15,22 +15,109 @@ import Heading from '../Components/Heading';
 import DropDown from '../assets/Icons/DropDown.svg';
 import SearchIcon from '../assets/Icons/Search.svg';
 
+import {Picker} from '@react-native-picker/picker';
 import firestore from '@react-native-firebase/firestore';
 
 const ComplaintDeskBar = props => {
   const [search, setSearch] = useState('');
+  const [sortValue, setSortValue] = useState('');
+  let sortArray = ['On Hold', 'Reviewed', 'In Progress'];
+  let complaint = [];
+
+  const searchbyName = async () => {
+    complaint = [];
+    await firestore()
+      .collection('complaints')
+      .where('complainee', '==', search)
+
+      .get()
+      .then(querySnapshot => {
+        if (querySnapshot.size != 0) {
+          querySnapshot.forEach(documentSnapshot => {
+            complaint.push({
+              key: documentSnapshot.id,
+              value: documentSnapshot.data(),
+            });
+          });
+          props.setComplaintArray(complaint);
+          props.setSearchDB(true);
+          props.setUpdateDB(true);
+        } else alert('not found');
+      });
+  };
+
+  const filterByStatus = async value => {
+    complaint = [];
+    if (value == 'All') {
+      await firestore()
+        .collection('complaints')
+        .orderBy('ticketID', 'asc')
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(documentSnapshot => {
+            complaint.push({
+              key: documentSnapshot.id,
+              value: documentSnapshot.data(),
+            });
+          });
+          props.setComplaintArray(complaint);
+          props.setFilterDB(true);
+          props.setUpdateDB(true);
+        });
+    } else {
+      await firestore()
+        .collection('complaints')
+        .where('status', '==', value)
+        .orderBy('ticketID', 'asc')
+        .get()
+        .then(querySnapshot => {
+          if (querySnapshot.size != 0) {
+            querySnapshot.forEach(documentSnapshot => {
+              complaint.push({
+                key: documentSnapshot.id,
+                value: documentSnapshot.data(),
+              });
+            });
+            props.setComplaintArray(complaint);
+            props.setFilterDB(true);
+            props.setUpdateDB(true);
+          }
+        });
+    }
+  };
+
   return (
     <View style={[styles.bar, styles.flex]}>
-      <TouchableOpacity style={[styles.flex, styles.touch, {width: 130}]}>
-        <Text
-          style={[Typography.Text_14pt, {color: Colors.MonochromeBlue1000}]}>
-          All
-        </Text>
-        <DropDown
-          width={20}
-          height={20}
-          fill={Colors.MonochromeBlue1000}></DropDown>
-      </TouchableOpacity>
+      <View
+        style={[
+          {
+            backgroundColor: Colors.MonochromeBlue300,
+            width: 170,
+            height: 40,
+            borderRadius: 20,
+            borderWidth: 1,
+            borderColor: Colors.MonochromeBlue500,
+            justifyContent: 'center',
+          },
+        ]}>
+        <Picker
+          mode={'dropdown'}
+          selectedValue={sortValue}
+          dropdownIconColor={Colors.MonochromeBlue1000}
+          color={Colors.MonochromeBlue1000}
+          style={{
+            color: 'black',
+          }}
+          onValueChange={itemValue => {
+            setSortValue(itemValue);
+            filterByStatus(itemValue);
+          }}>
+          <Picker.Item value={'All'} label={'All'} key={0} />
+          {sortArray.map(item => {
+            return <Picker.Item value={item} label={item} key={item} />;
+          })}
+        </Picker>
+      </View>
 
       <View
         style={[
@@ -43,19 +130,18 @@ const ComplaintDeskBar = props => {
             borderWidth: 1,
             borderColor: Colors.MonochromeBlue500,
           },
-        ]}
-        onPress={() => {}}>
+        ]}>
         <TextInput
           style={[
             Typography.Text_14pt,
-            {color: Colors.MonochromeBlue1000, marginLeft: 10},
+            {color: Colors.MonochromeBlue1000, marginLeft: 10, width: 130},
           ]}
           value={search}
           onChangeText={setSearch}
-          placeholder="Search"
+          placeholder="Search By Name"
           placeholderTextColor={Colors.MonochromeBlue1000}
           onSubmitEditing={() => {
-            alert(search);
+            searchbyName();
             setSearch('');
           }}></TextInput>
         <SearchIcon

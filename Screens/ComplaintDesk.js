@@ -23,11 +23,14 @@ import firestore from '@react-native-firebase/firestore';
 const ComplaintDesk = props => {
   let complainees = [];
   let complaints = [];
-  const [updateDB, setUpdateDB] = useState(false);
+  const [searchDB, setSearchDB] = useState(false);
+  const [updateDB, setUpdateDB] = useState(true);
+  const [filterDB, setFilterDB] = useState(false);
   const [selectedValue, setSelectedValue] = useState('java');
   const [complaint, setComplaint] = useState('');
   const [subject, setSubject] = useState('');
   const [key, setKey] = useState('');
+  const [status, setStatus] = useState('');
   const [noOfComplaints, setNoOfComplaints] = useState(0);
   const [complaintArray, setComplaintArray] = useState([]);
   const [array, setArray] = useState([]);
@@ -47,6 +50,7 @@ const ComplaintDesk = props => {
           setIsEditable(false);
           setKey('');
           setTicketID('');
+          setStatus('');
         }}>
         <View
           style={{
@@ -145,6 +149,7 @@ const ComplaintDesk = props => {
                 setIsEditable(false);
                 setTicketID('');
                 setKey('');
+                setStatus('');
               }}>
               <Text
                 style={[
@@ -219,6 +224,7 @@ const ComplaintDesk = props => {
         setComplainee={setSelectedValue}
         setSubject={setSubject}
         setKey={setKey}
+        setStatus={setStatus}
         setTicketID={setTicketID}
         navigation={props.navigation}
         route={props.route}
@@ -264,8 +270,8 @@ const ComplaintDesk = props => {
       });
   };
 
-  function addNewComplaint() {
-    firestore()
+  const addNewComplaint = async () => {
+    await firestore()
       .collection('complaints')
       .add({
         subject: subject,
@@ -279,17 +285,17 @@ const ComplaintDesk = props => {
       });
     setNoOfComplaints(noOfComplaints + 1);
     setUpdateDB(true);
-  }
+  };
 
-  const updateComplaint = () => {
-    firestore()
+  const updateComplaint = async () => {
+    await firestore()
       .collection('complaints')
       .doc(key)
       .update({
         subject: subject,
         complaint: complaint,
         complainee: selectedValue,
-        status: 'In Progress',
+        status: status,
         ticketID: ticketID,
       })
       .then(() => {
@@ -300,9 +306,17 @@ const ComplaintDesk = props => {
   };
 
   useEffect(() => {
-    getComplainees();
-    getComplaints();
-    setUpdateDB(false);
+    if (searchDB == false && updateDB == true && filterDB == false) {
+      getComplainees();
+      getComplaints();
+      setUpdateDB(false);
+    } else if (searchDB == true && updateDB == true && filterDB == false) {
+      setSearchDB(false);
+      setUpdateDB(false);
+    } else if (searchDB == false && updateDB == true && filterDB == true) {
+      setFilterDB(false);
+      setUpdateDB(false);
+    }
   }, [updateDB]);
 
   return (
@@ -312,7 +326,11 @@ const ComplaintDesk = props => {
         navigation={props.navigation}
         navigate="TextColors2"
         route={props.route}></Heading>
-      <ComplaintDeskBar setUpdateDB={setUpdateDB}></ComplaintDeskBar>
+      <ComplaintDeskBar
+        setComplaintArray={setComplaintArray}
+        setSearchDB={setSearchDB}
+        setUpdateDB={setUpdateDB}
+        setFilterDB={setFilterDB}></ComplaintDeskBar>
       {array.length !== 0 && (
         <AddMoreBtn
           click={() => {

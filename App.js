@@ -26,21 +26,19 @@ export default function App({route, navigation}) {
           component={TextColors2}
           navigation={navigation}
         />
-        {
-          <Stack.Screen
-            name="ComplaintDesk"
-            component={ComplaintDesk}
-            navigation={navigation}
-            route={route}
-          />
-          /* 
+        <Stack.Screen
+          name="ComplaintDesk"
+          component={ComplaintDesk}
+          navigation={navigation}
+          route={route}
+        />
+
         <Stack.Screen
           name="ViewComplaint"
           component={ViewComplaint}
           navigation={navigation}
           route={route}
-        /> */
-        }
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
