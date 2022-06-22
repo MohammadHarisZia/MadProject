@@ -1,9 +1,24 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Typography from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/Colors';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 const TextColors2 = props => {
+  useEffect(() => {
+    // firestore()
+    //   .collection('users')
+    //   .get()
+    //   .then(querySnapshot => {
+    //     console.log('Total users: ', querySnapshot.size);
+    //     querySnapshot.forEach(documentSnapshot => {
+    //       console.log(
+    //         'User ID: ',
+    //         documentSnapshot.id,
+    //         documentSnapshot.data(),
+    //       );
+    //     });
+    //   });
+  });
   return (
     <View>
       <TouchableOpacity

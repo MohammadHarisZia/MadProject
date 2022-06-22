@@ -19,8 +19,7 @@ import Circle from '../assets/Icons/Circle';
 
 import BottomModalOptions from '../Components/BottomModalOptions';
 
-import {db} from '../Firebase';
-import {ref, onValue, push, update, remove} from 'firebase/database';
+import firestore from '@react-native-firebase/firestore';
 
 const complaintCart = props => {
   const status = props.status;
@@ -39,7 +38,15 @@ const complaintCart = props => {
   }
 
   const deleteItem = () => {
-    remove(ref(db, `/complaints/${props.delKey}`));
+    firestore()
+      .collection('complaints')
+      .doc(props.delKey)
+      .delete()
+      .then(() => {
+        console.log('User deleted!');
+      });
+    props.setUpdateDB(true);
+    setVisible(false);
   };
 
   return (

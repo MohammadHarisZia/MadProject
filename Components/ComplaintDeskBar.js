@@ -1,14 +1,24 @@
 import React, {useState, useEffect} from 'react';
 import Typography from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/Colors';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 
 import Heading from '../Components/Heading';
 
 import DropDown from '../assets/Icons/DropDown.svg';
 import SearchIcon from '../assets/Icons/Search.svg';
 
-const ComplaintDeskBar = ({navigation, route}) => {
+import firestore from '@react-native-firebase/firestore';
+
+const ComplaintDeskBar = props => {
+  const [search, setSearch] = useState('');
   return (
     <View style={[styles.bar, styles.flex]}>
       <TouchableOpacity style={[styles.flex, styles.touch, {width: 130}]}>
@@ -22,16 +32,38 @@ const ComplaintDeskBar = ({navigation, route}) => {
           fill={Colors.MonochromeBlue1000}></DropDown>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.flex, styles.touch, {width: 170}]}>
-        <Text
-          style={[Typography.Text_14pt, {color: Colors.MonochromeBlue1000}]}>
-          Search
-        </Text>
+      <View
+        style={[
+          styles.flex,
+          {
+            backgroundColor: Colors.MonochromeBlue300,
+            width: 170,
+            height: 40,
+            borderRadius: 20,
+            borderWidth: 1,
+            borderColor: Colors.MonochromeBlue500,
+          },
+        ]}
+        onPress={() => {}}>
+        <TextInput
+          style={[
+            Typography.Text_14pt,
+            {color: Colors.MonochromeBlue1000, marginLeft: 10},
+          ]}
+          value={search}
+          onChangeText={setSearch}
+          placeholder="Search"
+          placeholderTextColor={Colors.MonochromeBlue1000}
+          onSubmitEditing={() => {
+            alert(search);
+            setSearch('');
+          }}></TextInput>
         <SearchIcon
           width={15}
           height={15}
-          fill={Colors.MonochromeBlue1000}></SearchIcon>
-      </TouchableOpacity>
+          fill={Colors.MonochromeBlue1000}
+          style={{marginRight: 15}}></SearchIcon>
+      </View>
     </View>
   );
 };

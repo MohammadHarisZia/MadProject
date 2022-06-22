@@ -18,21 +18,21 @@ import AddMoreBtn from '../Components/AddMoreBtn';
 
 import ComplaintCart from '../Components/ComplaintCart';
 
-import {db} from '../Firebase';
-import {ref, onValue, push, update, remove, query} from 'firebase/database';
+import firestore from '@react-native-firebase/firestore';
 
 const ComplaintDesk = props => {
   let complainees = [];
   let complaints = [];
+  const [updateDB, setUpdateDB] = useState(false);
+  const [selectedValue, setSelectedValue] = useState('java');
+  const [complaint, setComplaint] = useState('');
+  const [subject, setSubject] = useState('');
+  const [key, setKey] = useState('');
   const [noOfComplaints, setNoOfComplaints] = useState(0);
   const [complaintArray, setComplaintArray] = useState([]);
   const [array, setArray] = useState([]);
   const [complaintModal, setComplaintModal] = useState(false);
-  const [selectedValue, setSelectedValue] = useState('java');
-  const [complaint, setComplaint] = useState('');
-  const [subject, setSubject] = useState('');
   const [isEditable, setIsEditable] = useState(false);
-  const [key, setKey] = useState('');
   const [ticketID, setTicketID] = useState('');
 
   const modal = title => {
@@ -209,7 +209,7 @@ const ComplaintDesk = props => {
       <ComplaintCart
         ticketID={item.value.ticketID}
         complaint={item.value.complaint}
-        status={item.value.Status}
+        status={item.value.status}
         subject={item.value.subject}
         complainee={item.value.complainee}
         delKey={item.key}
@@ -221,55 +221,89 @@ const ComplaintDesk = props => {
         setKey={setKey}
         setTicketID={setTicketID}
         navigation={props.navigation}
-        route={props.route}></ComplaintCart>
+        route={props.route}
+        setUpdateDB={setUpdateDB}></ComplaintCart>
     );
   };
 
-  function addNewComplaint() {
-    push(ref(db, '/complaints'), {
-      subject: subject,
-      complaint: complaint,
-      complainee: selectedValue,
-      Status: 'In Progress',
-      ticketID: noOfComplaints,
-    });
-    setNoOfComplaints(noOfComplaints + 1);
-    console.log('inserted');
-  }
+  const getComplainees = async () => {
+    complainees = [];
+    try {
+      const response = await fetch(
+        'https://raw.githubusercontent.com/MohammadHarisZia/MadProject/main/complainees.json',
+      );
+      const json = await response.json();
 
-  const updateComplaint = () => {
-    console.log(key);
-    update(ref(db, `/complaints/`), {
-      [key]: {
+      Object.values(json.complainees).forEach(value => {
+        complainees.push(value.name);
+      });
+
+      setArray(complainees);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      //setLoading(false);
+    }
+  };
+
+  const getComplaints = async () => {
+    complaints = [];
+    await firestore()
+      .collection('complaints')
+      .orderBy('ticketID', 'asc')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          complaints.push({
+            key: documentSnapshot.id,
+            value: documentSnapshot.data(),
+          });
+        });
+        setComplaintArray(complaints);
+        setNoOfComplaints(querySnapshot.size + 1);
+      });
+  };
+
+  function addNewComplaint() {
+    firestore()
+      .collection('complaints')
+      .add({
         subject: subject,
         complaint: complaint,
         complainee: selectedValue,
-        Status: 'In Progress',
+        status: 'In Progress',
+        ticketID: noOfComplaints,
+      })
+      .then(() => {
+        console.log('User Inserted!');
+      });
+    setNoOfComplaints(noOfComplaints + 1);
+    setUpdateDB(true);
+  }
+
+  const updateComplaint = () => {
+    firestore()
+      .collection('complaints')
+      .doc(key)
+      .update({
+        subject: subject,
+        complaint: complaint,
+        complainee: selectedValue,
+        status: 'In Progress',
         ticketID: ticketID,
-      },
-    });
-    setIsEditable(false);
+      })
+      .then(() => {
+        console.log('User Updated!');
+        setUpdateDB(true);
+        setIsEditable(false);
+      });
   };
 
   useEffect(() => {
-    onValue(ref(db, '/complainees'), querySnapShot => {
-      let data = querySnapShot.val() || {};
-      Object.values(data).forEach(value => {
-        complainees.push(value.name);
-      });
-      setArray(complainees);
-    });
-
-    onValue(ref(db, '/complaints'), querySnapShot => {
-      complaints = [];
-      let data = querySnapShot.val() || {};
-      for (var key in data) {
-        complaints.push({key: key, value: data[key]});
-      }
-      setComplaintArray(complaints);
-      setNoOfComplaints(Object.values(data).length + 1);
-    });
-  }, []);
+    getComplainees();
+    getComplaints();
+    setUpdateDB(false);
+  }, [updateDB]);
 
   return (
     <View style={styles.container}>
@@ -278,7 +312,7 @@ const ComplaintDesk = props => {
         navigation={props.navigation}
         navigate="TextColors2"
         route={props.route}></Heading>
-      <ComplaintDeskBar></ComplaintDeskBar>
+      <ComplaintDeskBar setUpdateDB={setUpdateDB}></ComplaintDeskBar>
       {array.length !== 0 && (
         <AddMoreBtn
           click={() => {
