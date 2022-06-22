@@ -17,6 +17,8 @@ import Modal from 'react-native-modal';
 import Options from '../assets/Icons/Options';
 import Circle from '../assets/Icons/Circle';
 
+import BottomModalOptions from '../Components/BottomModalOptions';
+
 import {db} from '../Firebase';
 import {ref, onValue, push, update, remove} from 'firebase/database';
 
@@ -42,7 +44,18 @@ const complaintCart = props => {
 
   return (
     <View>
-      <TouchableOpacity View style={styles.container} onPress={() => {}}>
+      <TouchableOpacity
+        View
+        style={styles.container}
+        onPress={() => {
+          props.navigation.navigate('ViewComplaint', {
+            ticketID: props.ticketID,
+            subject: props.subject,
+            status: props.status,
+            complaint: props.complaint,
+            complainee: props.complainee,
+          });
+        }}>
         <TouchableOpacity>
           <Options
             width={50}
@@ -100,17 +113,17 @@ const complaintCart = props => {
                 borderTopRightRadius: 10,
                 borderTopLeftRadius: 10,
               }}>
-              <TouchableOpacity>
-                <Text
-                  style={[
-                    Typography.Header_20pt,
-                    styles.text,
-                    {textAlign: 'center'},
-                  ]}>
-                  View
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
+              <BottomModalOptions
+                title="View"
+                onPress={() => {
+                  props.navigation.navigate('ViewComplaint', {
+                    ticketID: props.ticketID,
+                  });
+                }}
+              />
+
+              <BottomModalOptions
+                title="Edit"
                 onPress={() => {
                   setVisible(false);
                   props.modalmethod(true);
@@ -120,30 +133,10 @@ const complaintCart = props => {
                   props.setComplaint(props.complaint);
                   props.setKey(props.delKey);
                   props.setTicketID(props.ticketID);
-                }}>
-                <Text
-                  style={[
-                    Typography.Header_20pt,
-                    styles.text,
-                    {textAlign: 'center'},
-                  ]}>
-                  Edit
-                </Text>
-              </TouchableOpacity>
+                }}
+              />
               {status !== 'Reviewed' && (
-                <TouchableOpacity
-                  onPress={() => {
-                    deleteItem();
-                  }}>
-                  <Text
-                    style={[
-                      Typography.Header_20pt,
-                      styles.text,
-                      {textAlign: 'center'},
-                    ]}>
-                    Delete
-                  </Text>
-                </TouchableOpacity>
+                <BottomModalOptions title="Delete" onPress={deleteItem} />
               )}
             </View>
           </Modal>

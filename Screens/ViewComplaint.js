@@ -3,10 +3,17 @@ import Typography from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/Colors';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
-const ViewComplaint = ({navigation, route}) => {
+import Heading from '../Components/Heading';
+
+const ViewComplaint = props => {
+  const {ticketID} = props.route?.params || {};
+  console.log(props.route.params);
   return (
     <View>
-      <Text style={{color: 'black'}}>template</Text>
+      <Heading
+        title={`Ticket # ${ticketID}`}
+        navigation={props.navigation}
+        navigate="ComplaintDesk"></Heading>
     </View>
   );
 };

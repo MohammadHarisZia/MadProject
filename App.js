@@ -9,6 +9,7 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Header from './Components/Header';
 import ComplaintDesk from './Screens/ComplaintDesk';
 import TextColors2 from './Screens/TextColors2';
+import ViewComplaint from './Screens/ViewComplaint';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -20,15 +21,22 @@ export default function App({route, navigation}) {
     <NavigationContainer>
       <Header></Header>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen
+        {/* <Stack.Screen
           name="TextColors2"
           component={TextColors2}
           navigation={navigation}
-        />
+        /> */}
         <Stack.Screen
           name="ComplaintDesk"
           component={ComplaintDesk}
           navigation={navigation}
+          route={route}
+        />
+        <Stack.Screen
+          name="ViewComplaint"
+          component={ViewComplaint}
+          navigation={navigation}
+          route={route}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -8,7 +8,6 @@ import BackBtn from '../assets/Icons/BackBtn.svg';
 import TextColors2 from '../Screens/TextColors2';
 
 const Heading = props => {
-  console.log(props.navigate);
   return (
     <View style={styles.flex}>
       <TouchableOpacity
@@ -17,10 +16,18 @@ const Heading = props => {
         }}>
         <BackBtn width={40} height={40} fill={Colors.Secondary1} />
       </TouchableOpacity>
-
-      <Text style={[Typography.Header_20pt, styles.heading]}>
-        {props.title}
-      </Text>
+      {props.title === 'Complaint Desk' && (
+        <Text
+          style={[Typography.Header_20pt, styles.heading, {marginLeft: 80}]}>
+          {props.title}
+        </Text>
+      )}
+      {props.title !== 'Ticket' && (
+        <Text
+          style={[Typography.Header_20pt, styles.heading, {marginLeft: 100}]}>
+          {props.title}
+        </Text>
+      )}
     </View>
   );
 };
@@ -28,7 +35,7 @@ const Heading = props => {
 const styles = StyleSheet.create({
   flex: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+
     alignItems: 'center',
     padding: 20,
     width: '100%',

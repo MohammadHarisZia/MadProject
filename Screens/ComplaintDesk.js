@@ -219,7 +219,9 @@ const ComplaintDesk = props => {
         setComplainee={setSelectedValue}
         setSubject={setSubject}
         setKey={setKey}
-        setTicketID={setTicketID}></ComplaintCart>
+        setTicketID={setTicketID}
+        navigation={props.navigation}
+        route={props.route}></ComplaintCart>
     );
   };
 
@@ -272,9 +274,10 @@ const ComplaintDesk = props => {
   return (
     <View style={styles.container}>
       <Heading
-        title="ComplaintDesk"
+        title="Complaint Desk"
         navigation={props.navigation}
-        navigate="TextColors2"></Heading>
+        navigate="TextColors2"
+        route={props.route}></Heading>
       <ComplaintDeskBar></ComplaintDeskBar>
       {array.length !== 0 && (
         <AddMoreBtn
