@@ -4,7 +4,7 @@ import React from 'react';
 import {ActivityIndicator,View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import HomeScreen from './HomeScreen';
-import FinanceScreen from './FinanceScreen';
+import PrescriptionScreen from './PrescriptionScreen';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -24,8 +24,8 @@ const TabStack = () => {
                 iconName = focused
                   ? 'home'
                   : 'home-outline';
-              } else if (route.name === 'FinanceScreen') {
-                iconName = focused ? 'card' : 'card-outline';
+              } else if (route.name === 'PrescriptionScreen') {
+                iconName = focused ? 'medkit' : 'medkit-outline';
               }
     
               // You can return any component that you like here!
@@ -41,9 +41,9 @@ const TabStack = () => {
                   return(
                     <Text style={{margin:2,fontSize:12,color:Colors.Secondary1}}>Home</Text>
                   )
-                }else if(route.name === 'FinanceScreen'){
+                }else if(route.name === 'PrescriptionScreen'){
                   return(
-                    <Text style={{margin:2,fontSize:12,color:Colors.Secondary1}}>Finance</Text>
+                    <Text style={{margin:2,fontSize:12,color:Colors.Secondary1}}>Prescription</Text>
                   )
                 }
               },
@@ -53,7 +53,7 @@ const TabStack = () => {
             })}>
     
             <Tab.Screen name="HomeScreen" component={HomeScreen} /> 
-            <Tab.Screen name="FinanceScreen" component={FinanceScreen} /> 
+            <Tab.Screen name="PrescriptionScreen" component={PrescriptionScreen} /> 
     
           </Tab.Navigator>
     )
