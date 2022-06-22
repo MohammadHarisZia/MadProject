@@ -34,18 +34,17 @@ const SignInScreen = ({navigation}) => {
     const SignUp= ()=>{
       Auth().createUserWithEmailAndPassword(email, password)
       .then(async(userCredential) => {
-        // Signed in 
-        var user = userCredential.user;
 
-       firestore().collection('users').doc(user.uid).set({
+       firestore().collection('users').doc(userCredential.user.uid).set({
           name: name,
           email: email,
           password: password,
           phone: phone,
-          pmcID: pmcID
+          pmcID: pmcID,
+          image:""
         }).then((docRef) => {
           console.log("Document Added");
-          signUp(user);
+          signUp(userCredential.user);
       })
       .catch((error) => {
           console.error("Error adding document: ", error);

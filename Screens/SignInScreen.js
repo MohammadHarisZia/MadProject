@@ -106,7 +106,8 @@ const onGoogleButtonPress=async() =>{
       email: user.email,
       password: "",
       phone: "",
-      pmcID: ""
+      pmcID: "",
+      image:""
     }).then((docRef) => {
       console.log("Document Added");
       console.log(user.uid)

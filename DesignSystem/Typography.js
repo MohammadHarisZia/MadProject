@@ -26,6 +26,10 @@ export default StyleSheet.create({
     fontSize: 10,
     fontFamily: 'Inter',
   },
+  Text_16pt: {
+    fontSize: 16,
+    fontFamily: 'Roboto',
+  },
   Text_14pt: {
     fontSize: 14,
     fontFamily: 'Roboto',

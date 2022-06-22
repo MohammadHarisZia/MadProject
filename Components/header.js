@@ -17,7 +17,8 @@ import { DefaultTheme, Menu, Divider, Provider } from 'react-native-paper';
 
 const Header = ({navigation}) => {
   const [visible, setVisible] = React.useState(false);
-  const [doc,setDoc] = React.useState({});
+  const google=Auth().currentUser.providerData[0].providerId;
+
 
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -57,7 +58,7 @@ const Header = ({navigation}) => {
           }} title="Profile" />
           <Divider />
           <Menu.Item onPress={() => {
-            if(Auth().currentUser.displayName!==""){
+            if(google!=="google.com"){
               GoogleSignin.signOut();
             }else{
               Auth().signOut();

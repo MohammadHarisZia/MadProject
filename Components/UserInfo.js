@@ -7,7 +7,7 @@ import {Colors} from '../DesignSystem/AppColors'
 import Typography from '../DesignSystem/Typography';
 import typo from '../DesignSystem/Typography';
 
-const UserInfo = ({name,labelValue, ...rest}) => {
+const UserInfo = ({bool=true,name,labelValue, ...rest}) => {
     const [clicked, setClicked] = React.useState(false);
     const ref = useRef(null);
   return (
@@ -23,13 +23,24 @@ const UserInfo = ({name,labelValue, ...rest}) => {
         onBlur={()=>setClicked(false)}
         onFocus={()=>setClicked(true)}
         ref={ref}
+        editable={bool}
         {...rest}
       />
+        {bool?(
       <View style={[clicked?styles.clicked:styles.unclicked,styles.iconStyle]}>
         <TouchableOpacity onPress={()=>{setClicked(true);ref.current.focus();}}>
         <Icon name="edit" size={27} color={clicked?Colors.MonochromeGreen200:Colors.MonochromeBlue700}/>
         </TouchableOpacity>
       </View>
+        ):
+        (
+      <View style={[styles.unclicked,styles.iconStyle]}>
+        <TouchableOpacity onPress={()=>{}} disabled={bool}>
+        <Icon name="lock" size={27} color={Colors.MonochromeGreen200}/>
+        </TouchableOpacity>
+      </View>
+        )}
+        
     </View>
     </View>
   );
@@ -59,7 +70,7 @@ const styles = StyleSheet.create({
     width: 50,
     borderWidth:0,  },
   input: {
-    paddingLeft: 15,
+    paddingLeft: 20,
     flex: 1,
     color: Colors.MonochromeBlue900,
     justifyContent: 'center',
@@ -68,7 +79,7 @@ const styles = StyleSheet.create({
     //borderWidth:1
   },
     textContainer: {
-
+      margin:1
     },
     text: {
         color:Colors.Secondary2
