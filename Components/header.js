@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import firestore from '@react-native-firebase/firestore';
 
 
 import { AuthContext } from './context';
@@ -16,6 +17,7 @@ import { DefaultTheme, Menu, Divider, Provider } from 'react-native-paper';
 
 const Header = ({navigation}) => {
   const [visible, setVisible] = React.useState(false);
+  const [doc,setDoc] = React.useState({});
 
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -46,7 +48,7 @@ const Header = ({navigation}) => {
           anchor={<Icon name="user" size={30} color={Colors.MonochromeBlue900} style={{marginRight:10}} onPress={openMenu}/>}>
           <Menu.Item onPress={() => {
             if(navigation!=null){
-            navigation.navigate("ProfileScreen")
+            navigation.navigate("ProfileScreen");
             closeMenu()
             }
             else{

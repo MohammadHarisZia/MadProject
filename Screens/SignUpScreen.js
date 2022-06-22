@@ -43,8 +43,8 @@ const SignInScreen = ({navigation}) => {
           password: password,
           phone: phone,
           pmcID: pmcID
-        },{ merge: true }).then((docRef) => {
-          console.log("Document Added with id: ", docRef.id);
+        }).then((docRef) => {
+          console.log("Document Added");
           signUp(user);
       })
       .catch((error) => {
