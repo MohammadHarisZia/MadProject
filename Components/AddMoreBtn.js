@@ -5,7 +5,7 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 import PlusIcon from '../assets/Icons/PlusIcon';
 
-const AddMoreBtn = (props, {navigation, route}) => {
+const AddMoreBtn = props => {
   return (
     <TouchableOpacity style={[styles.flex, styles.btn]} onPress={props.click}>
       <Text style={{color: Colors.MonochromeBlue100}}>Add More</Text>

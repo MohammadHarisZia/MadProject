@@ -10,9 +10,6 @@ import {
   TextInput,
 } from 'react-native';
 
-import Heading from '../Components/Heading';
-
-import DropDown from '../assets/Icons/DropDown.svg';
 import SearchIcon from '../assets/Icons/Search.svg';
 
 import {Picker} from '@react-native-picker/picker';
@@ -106,7 +103,7 @@ const ComplaintDeskBar = props => {
           dropdownIconColor={Colors.MonochromeBlue1000}
           color={Colors.MonochromeBlue1000}
           style={{
-            color: 'black',
+            color: Colors.MonochromeBlue1000,
           }}
           onValueChange={itemValue => {
             setSortValue(itemValue);

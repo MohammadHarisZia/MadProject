@@ -22,6 +22,16 @@ const Heading = props => {
           {props.title}
         </Text>
       )}
+      {props.title === 'Connect Wallet' && (
+        <Text
+          style={[
+            Typography.Header_20pt,
+            styles.heading,
+            {marginLeft: 70, width: 200},
+          ]}>
+          {props.title}
+        </Text>
+      )}
       {props.title !== 'Ticket' && (
         <Text
           style={[Typography.Header_20pt, styles.heading, {marginLeft: 100}]}>
@@ -35,7 +45,6 @@ const Heading = props => {
 const styles = StyleSheet.create({
   flex: {
     flexDirection: 'row',
-
     alignItems: 'center',
     padding: 20,
     width: '100%',

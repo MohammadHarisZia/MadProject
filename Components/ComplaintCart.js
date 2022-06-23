@@ -44,10 +44,10 @@ const complaintCart = props => {
       .delete()
       .then(() => {
         console.log('User deleted!');
+        props.setUpdateDB(true);
+        props.setSearchDB(false);
+        setVisible(false);
       });
-    props.setUpdateDB(true);
-    props.setSearchDB(false);
-    setVisible(false);
   };
 
   return (
@@ -165,7 +165,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   container: {
-    backgroundColor: Colors.MonochromeGreen300,
+    backgroundColor: Colors.MonochromeGreen100,
+    borderColor: Colors.MonochromeGreen700,
+    borderWidth: 1,
     borderRadius: 5,
     width: 330,
     marginTop: 20,

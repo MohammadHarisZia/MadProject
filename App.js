@@ -8,8 +8,10 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import Header from './Components/Header';
 import ComplaintDesk from './Screens/ComplaintDesk';
+import Finance from './Screens/Finance';
 import TextColors2 from './Screens/TextColors2';
 import ViewComplaint from './Screens/ViewComplaint';
+import WalletManagement from './Screens/WalletManagement';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -36,6 +38,20 @@ export default function App({route, navigation}) {
         <Stack.Screen
           name="ViewComplaint"
           component={ViewComplaint}
+          navigation={navigation}
+          route={route}
+        />
+
+        <Stack.Screen
+          name="Finance"
+          component={Finance}
+          navigation={navigation}
+          route={route}
+        />
+
+        <Stack.Screen
+          name="WalletManagement"
+          component={WalletManagement}
           navigation={navigation}
           route={route}
         />

@@ -4,27 +4,29 @@ import {Colors} from '../DesignSystem/Colors';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 const TextColors2 = props => {
-  useEffect(() => {
-    // firestore()
-    //   .collection('users')
-    //   .get()
-    //   .then(querySnapshot => {
-    //     console.log('Total users: ', querySnapshot.size);
-    //     querySnapshot.forEach(documentSnapshot => {
-    //       console.log(
-    //         'User ID: ',
-    //         documentSnapshot.id,
-    //         documentSnapshot.data(),
-    //       );
-    //     });
-    //   });
-  });
+  useEffect(() => {});
   return (
     <View>
       <TouchableOpacity
         style={styles.flex}
         onPress={() => {
           props.navigation.navigate('ComplaintDesk');
+        }}>
+        <Text style={[Typography.Header_24pt, {color: Colors.Primary1}]}>
+          Complaint
+        </Text>
+        <Text style={[Typography.Header_24pt, {color: Colors.Primary2}]}>
+          Complaint
+        </Text>
+        <Text style={[Typography.Header_24pt, {color: Colors.Primary3}]}>
+          Complaint
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.flex}
+        onPress={() => {
+          props.navigation.navigate('Finance');
         }}>
         <Text style={[Typography.Header_24pt, {color: Colors.Primary1}]}>
           Hello

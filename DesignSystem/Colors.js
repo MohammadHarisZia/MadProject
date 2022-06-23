@@ -16,7 +16,7 @@ export const Colors = {
   MonochromeGreen300: '#B0EEE6',
   MonochromeGreen200: '#C2EEE8',
   MonochromeGreen100: '#DDF5F2',
-  MonochromeBlue1000: '#00213A',
+  MonochromeBlue1000: '#003056',
   MonochromeBlue900: '#00345C',
   MonochromeBlue700: '#3D77A7',
   MonochromeBlue500: '#B6DEFF',

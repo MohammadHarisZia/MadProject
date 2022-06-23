@@ -76,7 +76,12 @@ const ComplaintDesk = props => {
           <TextInput
             style={[
               styles.text,
-              {padding: 15, height: 50, textAlignVertical: 'top'},
+              {
+                paddingHorizontal: 20,
+                paddingVertical: 15,
+                height: 50,
+                textAlignVertical: 'top',
+              },
             ]}
             value={subject}
             onChangeText={setSubject}
@@ -92,7 +97,11 @@ const ComplaintDesk = props => {
           <TextInput
             style={[
               styles.text,
-              {height: 150, padding: 25, textAlignVertical: 'top'},
+              {
+                height: 150,
+                padding: 20,
+                textAlignVertical: 'top',
+              },
             ]}
             multiline={true}
             numberOfLines={4}
@@ -228,7 +237,8 @@ const ComplaintDesk = props => {
         setTicketID={setTicketID}
         navigation={props.navigation}
         route={props.route}
-        setUpdateDB={setUpdateDB}></ComplaintCart>
+        setUpdateDB={setUpdateDB}
+        setSearchDB={setSearchDB}></ComplaintCart>
     );
   };
 
@@ -247,8 +257,6 @@ const ComplaintDesk = props => {
       setArray(complainees);
     } catch (error) {
       console.error(error);
-    } finally {
-      //setLoading(false);
     }
   };
 
@@ -271,13 +279,15 @@ const ComplaintDesk = props => {
   };
 
   const addNewComplaint = async () => {
+    const status = ['In Progress', 'On Hold', 'Reviewed'];
+    const random = Math.floor(Math.random() * status.length);
     await firestore()
       .collection('complaints')
       .add({
         subject: subject,
         complaint: complaint,
         complainee: selectedValue,
-        status: 'In Progress',
+        status: random,
         ticketID: noOfComplaints,
       })
       .then(() => {

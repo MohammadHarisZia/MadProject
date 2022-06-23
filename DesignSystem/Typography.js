@@ -6,8 +6,17 @@ export default StyleSheet.create({
     fontSize: 24,
     fontFamily: 'Inter',
   },
+  Header_22pt: {
+    fontSize: 22,
+    fontFamily: 'Inter',
+  },
+
   Header_20pt: {
     fontSize: 20,
+    fontFamily: 'Inter',
+  },
+  Header_18pt: {
+    fontSize: 18,
     fontFamily: 'Inter',
   },
   Header_16pt: {
@@ -25,6 +34,10 @@ export default StyleSheet.create({
   Header_10pt: {
     fontSize: 10,
     fontFamily: 'Inter',
+  },
+  Text_16pt: {
+    fontSize: 16,
+    fontFamily: 'Roboto',
   },
   Text_14pt: {
     fontSize: 14,
