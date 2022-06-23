@@ -280,14 +280,14 @@ const ComplaintDesk = props => {
 
   const addNewComplaint = async () => {
     const status = ['In Progress', 'On Hold', 'Reviewed'];
-    const random = Math.floor(Math.random() * status.length);
+    const random = Math.floor(Math.random() * 10 + 1) % status.length;
     await firestore()
       .collection('complaints')
       .add({
         subject: subject,
         complaint: complaint,
         complainee: selectedValue,
-        status: random,
+        status: status[random],
         ticketID: noOfComplaints,
       })
       .then(() => {
