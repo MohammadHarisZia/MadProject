@@ -2,8 +2,30 @@ import React,{useState,useEffect} from 'react';
 import typo from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/AppColors';
 import {View, Text, StyleSheet} from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const Prescription =({medicine,compound,form,size,freq,note,...rest})=>{
+import AwesomeAlert from 'react-native-awesome-alerts';
+
+import firestore from '@react-native-firebase/firestore';
+
+const Prescription =({medicine,compound,form,size,freq,note,dockey,...rest})=>{
+    const [Alert, setAlert] = useState(false);
+
+    const showAlert=()=>{
+        setAlert(true);
+    }
+    const hideAlert=()=>{
+        setAlert(false);
+    }
+
+    const onDeletePress = () => {
+        firestore().collection('Prescription').doc(dockey).delete().then(() => {
+            console.log('Document successfully deleted!');
+            hideAlert()
+        }).catch(error => {
+            console.error('Error removing document: ', error);
+        })
+    }
     return(
         <View style={styles.Container}>
             <View style={styles.header}>
@@ -36,6 +58,34 @@ const Prescription =({medicine,compound,form,size,freq,note,...rest})=>{
                 <Text style={[typo.Text_14pt,styles.text,{width:"60%",textAlign:'right'}]}>{note}</Text>
                 </View>
             </View>
+
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.Deletebutton} onPress={()=>showAlert()}>
+                <Text style={[typo.Header_14pt,styles.DeletebuttonText]}>Delete</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.Editbutton} {...rest}>
+                <Text style={[typo.Header_14pt,styles.EditbuttonText]}>Edit</Text>
+              </TouchableOpacity>
+            </View>
+            <AwesomeAlert
+          show={Alert}
+          showProgress={false}
+          title="Confirmation"
+          message="Are u sure u want to delete Prescription?"
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="cancel"
+          confirmText="delete"
+          confirmButtonColor="#F1948A"
+          onCancelPressed={() => {
+            hideAlert()
+          }}
+          onConfirmPressed={() => {
+            onDeletePress()
+          }}
+        />
         </View>
     )
 }
@@ -69,7 +119,39 @@ const styles = StyleSheet.create({
     },
     text:{
         color:Colors.Secondary1,
-    }
+    },
+    buttonContainer:{
+        flexDirection:'row',
+        marginTop:10,
+          width: '100%',
+          justifyContent:"space-evenly",
+      },
+      Deletebutton:{
+        backgroundColor: "#F1948A",
+          padding:10,
+          paddingHorizontal:20,
+          width:'100%',
+          borderRadius:20,
+          borderWidth:1,
+          borderColor: Colors.MonochromeBlue500,
+      },
+      Editbutton:{
+        backgroundColor: "#85C1E9",
+        paddingHorizontal:30,
+          padding:10,
+          width:'100%',
+          borderRadius:20,
+          borderWidth:1,
+          borderColor: Colors.MonochromeBlue500,
+      },
+      DeletebuttonText:{
+        textAlign:"center",
+        color:Colors.MonochromeBlue1000
+      },
+        EditbuttonText:{
+        textAlign:"center",
+        color:Colors.MonochromeBlue1000,
+      },
 })
 
 export default Prescription;

@@ -23,7 +23,8 @@ import Auth from '@react-native-firebase/auth';
 const Stack = createStackNavigator();
 
 export default function App() {
-  LogBox.ignoreLogs(["AsyncStorage has been extracted from react-native core and will be removed in a future release."]);
+  LogBox.ignoreLogs(["AsyncStorage has been extracted from react-native core and will be removed in a future release.",
+"Can't perform a React state update on an unmounted component."]);
 
   const [isLoading, setIsLoading] = React.useState(true);
   const [userToken, setUserToken] = React.useState(null);

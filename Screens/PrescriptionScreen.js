@@ -13,18 +13,23 @@ import Prescription from '../Components/Prescription';
 import ExtraDimensions from 'react-native-extra-dimensions-android'
 
 const PrescriptionScreen = ({navigation}) => {
+  
   const [modalVisible, setModalVisible] = useState(false);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [Medicine, setMedicine] = useState("");
   const [Compound, setCompound] = useState("");
-  const [DosageForm, setDosageForm] = useState("injection");
+  const [DosageForm, setDosageForm] = useState("");
   const [DosageSize, setDosageSize] = useState("");
   const [Frequency, setFrequency] = useState("");
   const [Details, setDetails] = useState("");
+  const [Dockey, setDockey] = useState("");
+
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
     const subscriber = firestore()
       .collection('Prescription')
       .onSnapshot(querySnapshot => {
@@ -35,14 +40,14 @@ const PrescriptionScreen = ({navigation}) => {
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           });
-        });
+        })
   
         setUsers(users);
         setLoading(false);
       });
   
     // Unsubscribe from events when no longer in use
-    return () => subscriber();
+    return () => {subscriber()};
   }, []);
 
   const onCancelPress=()=>{
@@ -52,6 +57,7 @@ const PrescriptionScreen = ({navigation}) => {
     setDosageSize("");
     setFrequency("");
     setDetails("");
+    setDockey("");
     toggleModal();
   }
 
@@ -66,6 +72,37 @@ const PrescriptionScreen = ({navigation}) => {
         Details:Details,
       }).then(()=>{
         console.log("Added");
+        onCancelPress();
+      }).catch(error=>{
+        console.log(error);
+      })
+    }
+    else{
+      Alert.alert("Please fill all the fields");
+    }
+  }
+  const onEditPress=(med,comp,form,size,freq,details,key)=>{
+    setEdit(true)
+    setMedicine(med);
+    setCompound(comp);
+    setDosageForm(form);
+    setDosageSize(size);
+    setFrequency(freq);
+    setDetails(details);
+    setDockey(key);
+    toggleModal();
+  }
+  const onEdit=()=>{
+    if(Medicine.length>0 && Compound.length>0 && DosageSize.length>0 && Frequency.length>0 && Details.length>0){
+      firestore().collection("Prescription").doc(Dockey).update({
+        Medicine:Medicine,
+        Compound:Compound,
+        DosageForm:DosageForm,
+        DosageSize:DosageSize,
+        Frequency:Frequency,
+        Details:Details,
+      }).then(()=>{
+        console.log("Edited");
         onCancelPress();
       }).catch(error=>{
         console.log(error);
@@ -106,7 +143,7 @@ const PrescriptionScreen = ({navigation}) => {
 
     <View style={styles.container}>
       <View style={styles.addContainer}>
-        <TouchableOpacity style={styles.addButton} onPress={()=>toggleModal()}>
+        <TouchableOpacity style={styles.addButton} onPress={()=>{setEdit(false);toggleModal()}}>
       <Text style={[typo.Text_16pt,styles.addButtonText]}>Add  <Icon name="plus-circle" size={20} 
       color={Colors.MonochromeBlue100} /></Text>
       </TouchableOpacity>
@@ -163,9 +200,16 @@ const PrescriptionScreen = ({navigation}) => {
               <TouchableOpacity style={styles.Cancelbutton} onPress={()=>onCancelPress()}>
                 <Text style={[typo.Header_16pt,styles.CancelbuttonText]}>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.Addbutton} onPress={()=>onAddPress()}>
+              {!edit?(
+                <TouchableOpacity style={styles.Addbutton} onPress={()=>onAddPress()}>
                 <Text style={[typo.Header_16pt,styles.AddbuttonText]}>Add</Text>
               </TouchableOpacity>
+              ):(
+                <TouchableOpacity style={styles.Addbutton} onPress={()=>onEdit()}>
+                <Text style={[typo.Header_16pt,styles.AddbuttonText]}>Edit</Text>
+              </TouchableOpacity>
+              )}
+              
             </View>
           
         </View>
@@ -177,7 +221,11 @@ const PrescriptionScreen = ({navigation}) => {
           renderItem={({ item }) => (
             <View style={styles.listItemContainer}>
               <Prescription medicine={item.Medicine} compound={item.Compound} form={item.DosageForm}
-              size={item.DosageSize} freq={item.Frequency} note={item.Details}/>
+              size={item.DosageSize} freq={item.Frequency} note={item.Details} dockey={item.key}
+              onPress={()=>{
+                onEditPress(item.Medicine,item.Compound,item.DosageForm,
+                  item.DosageSize,item.Frequency,item.Details,item.key)
+                }}/>
               </View>
           )}/>) : ( <ActivityIndicator size="large" color={Colors.MonochromeBlue700} />)}
         </View>
