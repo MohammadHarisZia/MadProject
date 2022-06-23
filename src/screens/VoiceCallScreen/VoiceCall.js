@@ -5,9 +5,13 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const VoiceCall = props => {
+const VoiceCall = ({route, navigation}) => {
   const [isMuted, setIsMuted] = useState(false);
   const [isSpeaker, setIsSpeaker] = useState(false);
+
+  const user = route.params.user;
+  const loggedUser = route.params.loggedUser;
+  
 
   return (
     <View style={styles.container}>
@@ -16,10 +20,9 @@ const VoiceCall = props => {
         <Ionicons name="chevron-back" size={30} color={'#484848'} />
       </TouchableOpacity>
 
-      {/* username and time */}
       <View style={styles.userInfo}>
         <Text style={styles.username}>
-          {props?.username ? props?.username : 'Default user'}
+          {user?.userName ? user?.userName : 'Default user'}
         </Text>
         <Text style={styles.time}>12:22</Text>
       </View>

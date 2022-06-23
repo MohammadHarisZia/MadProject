@@ -10,9 +10,10 @@ const Message = props => {
   const color = props?.senderID !== props?.id ? '#484848' : '#eeeeee';
   const align = props?.senderID === props?.id ? 'flex-end' : 'flex-start';
 
-  console.log('current user', props?.senderID);
-  console.log('message id', props?.id);
-  console.log('bool', props?.senderID === props?.id);
+  // console.log(background, color, align);
+  // console.log('current user', props?.senderID);
+  // console.log('message id', props?.id);
+  // console.log('bool', props?.senderID === props?.id);
 
   return (
     <View style={[styles.container, {justifyContent: align}]} key={props.id}>

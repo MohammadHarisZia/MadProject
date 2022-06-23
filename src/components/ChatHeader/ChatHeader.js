@@ -15,15 +15,23 @@ const ChatHeader = props => {
 
       {/* Receiver name */}
       <Text style={styles.receiver}>
-        {props?.receiverName ? props?.receiverName : 'default name'}
+        {props?.user?.userName ? props?.user?.userName : 'default name'}
       </Text>
 
       {/* Icons */}
       <View style={styles.callControllers}>
-        <TouchableOpacity style={styles.controller}>
+        <TouchableOpacity
+          style={styles.controller}
+          onPress={() => {
+            props.makeCall(false);
+          }}>
           <Ionicons name="call" size={20} color={'#808080'} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.controller}>
+        <TouchableOpacity
+          style={styles.controller}
+          onPress={() => {
+            props.makeCall(true);
+          }}>
           <Ionicons name="videocam" size={20} color={'#808080'} />
         </TouchableOpacity>
       </View>

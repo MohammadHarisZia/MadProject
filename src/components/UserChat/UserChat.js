@@ -1,17 +1,44 @@
-import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, Text, StyleSheet, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // local imports
 import {Colors} from '../../../DesignSystem/Colors';
 
 const UserChat = props => {
+  // initializing navigation instance to navigate to the chat screen
   const navigation = useNavigation();
 
-  const openChat = () => {
+  // fetching data from the props
+  const {loggedUser, user, recent, isRead, time} = props;
+
+  // storing the other user object in async storage to be used in other screens
+  // const storeData = async () => {
+  //   try {
+  //     const data = JSON.stringify(user);
+  //     await AsyncStorage.setItem('user', data);
+  //     return true;
+  //   } catch (e) {
+  //     Alert.alert('Error', 'failed to set the user in async storage', [
+  //       {text: 'OK'},
+  //       {
+  //         text: 'RETRY',
+  //         onPress: () => {
+  //           storeData(user);
+  //         },
+  //       },
+  //     ]);
+  //     return false;
+  //   }
+  // };
+
+  const openChat = async () => {
+    // const stored = await storeData();
+
     navigation.navigate('Chat', {
-      user: props?.user,
-      defaultUser: props?.defaultUser,
+      loggedUser: loggedUser,
+      user: user,
     });
   };
 
@@ -21,23 +48,19 @@ const UserChat = props => {
         {/* User information container to diplay displayName and the recent message */}
         <View style={styles.userInfoContainer}>
           <Text style={styles.userName}>
-            {props?.user?.displayName
-              ? props?.user?.displayName
-              : 'Default user'}
+            {user?.displayName ? user?.displayName : 'Default user'}
           </Text>
           <Text style={styles.recentMessage}>
-            {props?.recent ? props?.recent : 'This is a message'}
+            {recent ? recent : 'This is a message'}
           </Text>
         </View>
 
         {/* Time and new message indicator */}
         <View style={styles.timeContainer}>
-          <Text style={styles.time}>{props?.time ? props?.time : '00:00'}</Text>
-          <View style={styles.notification} />
+          <Text style={styles.time}>{time ? time : '00:00'}</Text>
+          {isRead === false && <View style={styles.notification} />}
         </View>
       </View>
-
-      {/* Seperator */}
     </TouchableOpacity>
   );
 };
