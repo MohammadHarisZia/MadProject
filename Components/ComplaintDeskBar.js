@@ -20,7 +20,7 @@ import firestore from '@react-native-firebase/firestore';
 
 const ComplaintDeskBar = props => {
   const [search, setSearch] = useState('');
-  const [sortValue, setSortValue] = useState('');
+  const [sortValue, setSortValue] = useState('All');
   let sortArray = ['On Hold', 'Reviewed', 'In Progress'];
   let complaint = [];
 
