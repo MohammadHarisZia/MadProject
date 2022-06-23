@@ -5,6 +5,7 @@ import {ActivityIndicator,View, Text, StyleSheet, TouchableOpacity} from 'react-
 
 import HomeScreen from './HomeScreen';
 import PrescriptionScreen from './PrescriptionScreen';
+import TeleMedicineScreen from './TeleMedicineScreen';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -21,11 +22,13 @@ const TabStack = () => {
               let iconName;
     
               if (route.name === 'HomeScreen') {
-                iconName = focused
-                  ? 'home'
-                  : 'home-outline';
-              } else if (route.name === 'PrescriptionScreen') {
+                iconName = focused? 'home': 'home-outline';
+              } 
+              else if (route.name === 'PrescriptionScreen') {
                 iconName = focused ? 'medkit' : 'medkit-outline';
+              }
+              else if(route.name === 'TeleMedicineScreen'){
+                iconName = focused ? 'chatbox-ellipses' : 'chatbox-ellipses-outline';
               }
     
               // You can return any component that you like here!
@@ -46,6 +49,11 @@ const TabStack = () => {
                     <Text style={{margin:2,fontSize:12,color:Colors.Secondary1}}>Prescription</Text>
                   )
                 }
+                else if(route.name === 'TeleMedicineScreen'){
+                  return(
+                    <Text style={{margin:2,fontSize:12,color:Colors.Secondary1}}>TeleMedicine</Text>
+                  )
+                }
               },
               tabBarStyle: {
                 height: 50,
@@ -54,6 +62,8 @@ const TabStack = () => {
     
             <Tab.Screen name="HomeScreen" component={HomeScreen} /> 
             <Tab.Screen name="PrescriptionScreen" component={PrescriptionScreen} /> 
+            <Tab.Screen name="TeleMedicineScreen" component={TeleMedicineScreen} />
+
     
           </Tab.Navigator>
     )
