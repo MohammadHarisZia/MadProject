@@ -6,7 +6,8 @@ import {
   Image,
   Platform,
   StyleSheet,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native';
 
 import InputText from '../Components/InputText';
@@ -32,7 +33,15 @@ const SignInScreen = ({navigation}) => {
     const { signUp } = React.useContext(AuthContext);
 
     const SignUp= ()=>{
-      Auth().createUserWithEmailAndPassword(email, password)
+      if(name.length>0 && email.length>0 && password.length>0 && Cpassword.length>0 && pmcID.length>0){
+      if(password!=Cpassword){
+        Alert.alert("Password does not match")
+        if(phone.length<10){
+          Alert.alert("Phone number is not valid")
+        }
+      }
+      else{
+        Auth().createUserWithEmailAndPassword(email, password)
       .then(async(userCredential) => {
 
        firestore().collection('users').doc(userCredential.user.uid).set({
@@ -51,11 +60,14 @@ const SignInScreen = ({navigation}) => {
       });
       })
       .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log(errorCode,errorMessage)
+        Alert.alert(error.code,error.message)
       });
     }
+  }
+    else{
+      Alert.alert("Please fill all the fields")
+    }
+  }
 
 return(
   <ScrollView>

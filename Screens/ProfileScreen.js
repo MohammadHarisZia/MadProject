@@ -145,7 +145,11 @@ const ProfileScreen = ({ navigation,route }) => {
             {url==""?(
         <Image style={styles.logo} source={require('../assets/Icons/defaultuser.png')}/>
             ):(
-        <Image style={styles.logo} source={{uri:url}}/>
+                image==""?(
+                    <Image style={styles.logo} source={{uri:url}}/>
+                ):(
+                 <Image style={styles.logo} source={{uri:image}}/>
+                )
             )}
         </TouchableOpacity>
             <Text style={[typo.Header_20pt,styles.headtext]}>{name}</Text>

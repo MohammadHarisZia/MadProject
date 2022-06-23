@@ -6,7 +6,8 @@ import {
   Image,
   Platform,
   StyleSheet,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native';
 
 import InputText from '../Components/InputText';
@@ -33,12 +34,13 @@ import { AuthContext } from '../Components/context';
 //import {signInWithRedirect,GoogleAuthProvider,getRedirectResult,FacebookAuthProvider } from "firebase/auth";
 
 const SignInScreen = ({navigation}) => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { signIn } = React.useContext(AuthContext);
 
   const SignIn = () => {
-    Auth().signInWithEmailAndPassword(email, password)
+    if(email.length>0 && password.length>0){
+      Auth().signInWithEmailAndPassword(email, password)
   .then((userCredential) => {
     // Signed in
     var user = userCredential.user;
@@ -48,8 +50,12 @@ const SignInScreen = ({navigation}) => {
   .catch((error) => {
     var errorCode = error.code;
     var errorMessage = error.message;
-    console.log(errorCode,errorMessage);
+    Alert.alert(errorCode,errorMessage);
   });
+}
+else{
+  Alert.alert("Please enter email and password")
+}
 }
 
 // const Social=(social)=>{
