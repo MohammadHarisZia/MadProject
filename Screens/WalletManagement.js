@@ -922,7 +922,7 @@ const WalletManagement = props => {
 
           <TouchableOpacity
             onPress={() => {
-              if (creditCard != '') {
+              if (easyPaisa != '') {
                 alert('Currently we only support one Credit Card');
               } else {
                 setAddAccount(true);
