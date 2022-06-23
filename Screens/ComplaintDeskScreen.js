@@ -6,13 +6,13 @@ import {View, Text, StyleSheet, ActivityIndicator, TouchableOpacity} from 'react
 
 import Header from '../Components/Header';
 
-const TeleMedicineScreen = ({navigation}) => {
+const ComplaintDeskScreen = ({navigation}) => {
   return (
     <>
     <Header navigation={navigation}/>
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={[typo.Header_24pt,styles.header]}>TeleMedicine</Text>
+        <Text style={[typo.Header_24pt,styles.header]}>Complaint Desk</Text>
       </View>
     </View>
     </>
@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default TeleMedicineScreen;
+export default ComplaintDeskScreen;
