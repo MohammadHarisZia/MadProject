@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import typo from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/AppColors';
-import {View, Text, StyleSheet, TextInput, TouchableOpacity,Alert,FlatList,ActivityIndicator} from 'react-native'
+import {View, Text, StyleSheet} from 'react-native'
 
 const Prescription =({medicine,compound,form,size,freq,note,...rest})=>{
     return(
@@ -42,7 +42,7 @@ const Prescription =({medicine,compound,form,size,freq,note,...rest})=>{
 const styles = StyleSheet.create({
     Container:{
         flex:1,
-        backgroundColor:Colors.MonochromeBlue300,
+        backgroundColor:Colors.MonochromeBlue100,
         padding:10,
         marginVertical:8,
         marginHorizontal:16,
