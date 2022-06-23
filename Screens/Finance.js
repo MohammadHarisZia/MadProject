@@ -1,13 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Typography from '../DesignSystem/Typography';
 import {Colors} from '../DesignSystem/Colors';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import Heading from '../Components/Heading';
 import DropDown from '../assets/Icons/DropDown.svg';
 import AnalyticsUp from '../assets/Icons/AnalyticsUp';
@@ -19,8 +13,44 @@ import Modal from 'react-native-modal';
 
 import BottomModalOptions from '../Components/BottomModalOptions';
 
+import TransactionCart from '../Components/TransactionCart';
+
 const Finance = props => {
   const [visible, setVisible] = useState(false);
+  const [transactionArray, setTransactionArray] = useState([]);
+  let transactions = [];
+
+  const renderItem = ({item}) => {
+    return (
+      <TransactionCart
+        amount={item.amount}
+        img={item.img}
+        name={item.name}
+        date={item.date}></TransactionCart>
+    );
+  };
+
+  const getTrasactions = async () => {
+    transactions = [];
+    try {
+      const response = await fetch(
+        'https://raw.githubusercontent.com/MohammadHarisZia/MadProject/main/transactions.json',
+      );
+      const json = await response.json();
+
+      Object.values(json.transactions).forEach(value => {
+        transactions.push(value);
+      });
+
+      setTransactionArray(transactions);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getTrasactions();
+  }, []);
 
   return (
     <View>
@@ -178,6 +208,13 @@ const Finance = props => {
           </Text>
         </TouchableOpacity>
       </View>
+
+      <FlatList
+        style={{height: 250}}
+        data={transactionArray}
+        renderItem={renderItem}
+      />
+
       <Modal
         isVisible={visible}
         onBackdropPress={() => {
