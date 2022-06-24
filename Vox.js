@@ -108,12 +108,14 @@ export function convertCodeMessage(code) {
 
 // function to show the error on mobile
 export function showError(message, navigation, user) {
+  console.log(user);
   Alert.alert('Login error', message, [
     {
       text: 'OK',
       onPress: () => {
         if (navigation) {
-          navigation.navigate('History', {uID: user.id});
+          // navigation.navigate('History', {uID: user.id});
+          navigation.navigate('History');
         }
       },
     },

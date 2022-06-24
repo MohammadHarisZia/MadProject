@@ -1,17 +1,112 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Voximplant} from 'react-native-voximplant';
+
+// local imports
+import {getCallSettings, showError} from '../../../Vox';
 
 const VoiceCall = ({route, navigation}) => {
   const [isMuted, setIsMuted] = useState(false);
   const [isSpeaker, setIsSpeaker] = useState(false);
 
-  const user = route.params.user;
-  const loggedUser = route.params.loggedUser;
-  
+  // getting the data from the params
+  const user = route.params?.user;
+  const loggedUser = route.params?.loggedUser;
+  const isVideoCall = route.params?.isVideoCall;
+  const call = route.params?.call;
+  const callStatus = route.params?.callStatus;
+  const setCallStatus = route.params?.setCallStatus;
+
+  // creating a useRef states to store the call settings and endpoint
+  const endpoint = useRef(null); //endpoint of the other user to be used for event subscriptions
+
+  // componentDidMount function to handle the calling functionality including the subcriptions and unsubscriptions
+  useEffect(() => {
+    // setting the call settings
+    const callSettings = getCallSettings(isVideoCall);
+
+    // in case the user receives a call
+    const answerCall = async () => {
+      subscribeToCallEvents();
+      endpoint.current = call.current.getEndpoints()[0];
+      subscribeToEndpointEvent();
+      call.current.answer(callSettings);
+      if (isVideoCall) {
+        navigation.navigate('VideoCall', {
+          user,
+          loggedUser,
+          isIncomingCall,
+          isVideoCall,
+          call,
+          callStatus,
+          setCallStatus,
+        });
+        return;
+      }
+    };
+
+    // function to hangup the call
+    const onHangupPress = () => {
+      call.current.hangup();
+    };
+
+    // call events that can occur on the caller endpoint
+    const subscribeToCallEvents = () => {
+      call.current.on(Voximplant.CallEvents.Failed, callEvent => {
+        showError(callEvent.reason, navigation, loggedUser);
+        onHangupPress();
+      });
+      call.current.on(Voximplant.CallEvents.ProgressToneStart, callEvent => {
+        setCallStatus('Calling...');
+      });
+      call.current.on(Voximplant.CallEvents.Connected, callEvent => {
+        setCallStatus('Connected');
+      });
+      call.current.on(Voximplant.CallEvents.Disconnected, callEvent => {
+        navigation.navigate('History');
+      });
+      call.current.on(Voximplant.CallEvents.EndpointAdded, callEvent => {
+        endpoint.current = callEvent.endpoint;
+        subscribeToEndpointEvent();
+      });
+    };
+
+    // call events that can occur on the receiver endpoint
+    const subscribeToEndpointEvent = async () => {
+      endpoint.current.on(
+        Voximplant.EndpointEvents.RemoteVideoStreamAdded,
+        endpointEvent => {
+          setRemoteVideoStreamId(endpointEvent.videoStream.id);
+        },
+      );
+    };
+
+    // if the call is incoming then call the answer call method else call makeCall method
+    answerCall();
+
+    // onComponentUnbound event, all the callEvents will be unsubscribed
+    return () => {
+      call.current.off(Voximplant.CallEvents.Failed);
+      call.current.off(Voximplant.CallEvents.ProgressToneStart);
+      call.current.off(Voximplant.CallEvents.Connected);
+      call.current.off(Voximplant.CallEvents.Disconnected);
+    };
+  }, [isVideoCall]);
+
+  // function to hangup the call
+  const onHangupPress = () => {
+    call.current.hangup();
+  };
+
+  // function to toggle mute
+  const toggleMute = () => {
+    call.current.sendAudio(isMuted);
+    setIsMuted(prevState => !prevState);
+  };
 
   return (
     <View style={styles.container}>
@@ -22,37 +117,24 @@ const VoiceCall = ({route, navigation}) => {
 
       <View style={styles.userInfo}>
         <Text style={styles.username}>
-          {user?.userName ? user?.userName : 'Default user'}
+          {user?.userName ? user?.userName : user}
         </Text>
-        <Text style={styles.time}>12:22</Text>
+        <Text style={styles.time}>{'In a call'}</Text>
       </View>
 
       {/* controls */}
       <View style={styles.callControlsContainer}>
-        {/* icons row 1 */}
-        <View style={styles.controlsRow}>
-          <TouchableOpacity style={styles.smallIcon}>
-            <Material name="message" size={20} color={'#fff'} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.smallIcon}>
-            <Ionicons name="videocam" size={20} color={'#fff'} />
-          </TouchableOpacity>
-        </View>
-
-        {/* icons row 2 */}
         <View style={styles.controlsRow}>
           <TouchableOpacity
             style={[
               styles.smallIcon,
               {backgroundColor: `${isMuted ? '#808080' : '#eeeeee'}`},
             ]}
-            onPress={() => {
-              setIsMuted(prevState => !prevState);
-            }}>
+            onPress={toggleMute}>
             <FontAwesome name="microphone-slash" size={20} color={'#fff'} />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.hangup}>
+          <TouchableOpacity style={[styles.bigIcon]} onPress={onHangupPress}>
             <Material name="call-end" size={30} color="#ffffff" />
           </TouchableOpacity>
 
@@ -64,7 +146,7 @@ const VoiceCall = ({route, navigation}) => {
             onPress={() => {
               setIsSpeaker(prevState => !prevState);
             }}>
-            <AntDesign name="sound" size={20} color={'#fff'} />
+            <Ionicons name="videocam" size={20} color={'#fff'} />
           </TouchableOpacity>
         </View>
       </View>
@@ -131,5 +213,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#990000',
     borderRadius: 50,
+    zIndex: 2,
   },
 });

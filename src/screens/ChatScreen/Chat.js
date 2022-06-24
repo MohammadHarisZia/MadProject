@@ -23,6 +23,8 @@ const Chat = ({navigation, route}) => {
   const user = route.params?.user;
   const loggedUser = route.params?.loggedUser;
 
+  console.log(loggedUser);
+
   const [message, setMessage] = useState('');
   const [messageAdded, setMessageAdded] = useState(true);
   const [fetchMessages, setFetchMessages] = useState([]);
@@ -78,9 +80,9 @@ const Chat = ({navigation, route}) => {
     if (permissionsGranted) {
       navigation.navigate('Calling', {
         isVideoCall: videoCall,
-        callee: user,
+        user: user,
         isIncomingCall: false,
-        caller: loggedUser,
+        loggedUser: loggedUser,
       });
     } else {
       console.log('permissions not granted');

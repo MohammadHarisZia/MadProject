@@ -1,8 +1,17 @@
 import {StyleSheet, TextInput, View, Button} from 'react-native';
 import React, {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({navigation}) {
-  const [id, setId] = useState(0);
+  const storeData = async value => {
+    try {
+      await AsyncStorage.setItem('userID', JSON.stringify(value));
+    } catch (e) {
+      // saving error
+    }
+  };
+
+  const [id, setId] = useState(1);
 
   return (
     <View>
@@ -21,7 +30,9 @@ export default function Login({navigation}) {
       <Button
         title={'Enter'}
         onPress={() => {
-          navigation.navigate('History', {uID: id});
+          storeData(id ? id : 1);
+          // navigation.navigate('History', {uID: id});
+          navigation.navigate('History');
         }}
       />
     </View>

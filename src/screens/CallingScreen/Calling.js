@@ -5,15 +5,20 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import {Voximplant} from 'react-native-voximplant';
 
 // local imports
-import {voximplant, getCallSettings, showError} from '../../../Vox';
+import {voximplant, getCallSettings, showError, login} from '../../../Vox';
 
 const Calling = ({route, navigation}) => {
   // getting the data from the params
-  const callee = route.params?.callee;
-  const caller = route.params?.caller;
+  const user = route.params?.user;
+  const loggedUser = route.params?.loggedUser;
   const isIncomingCall = route.params?.isIncomingCall;
   const isVideoCall = route.params?.isVideoCall;
   const incomingCall = route.params?.call;
+  // hooks
+  const [localVideoStreamId, setLocalVideoStreamId] = useState(''); //hook that will contain the id to the local video stream
+  const [remoteVideoStreamId, setRemoteVideoStreamId] = useState(''); //hook that will contain the id to the remove video stream
+
+  console.log('CALLINGSCREEN', isVideoCall);
 
   // creating a useRef states to store the call settings and endpoint
   const call = useRef(incomingCall); //call object to store the call properties and used for event subscriptions
@@ -21,8 +26,6 @@ const Calling = ({route, navigation}) => {
 
   // hooks
   const [callStatus, setCallStatus] = useState('Initializing...'); //hook that will show the current status of the call
-  const [localVideoStreamId, setLocalVideoStreamId] = useState(''); //hook that will contain the id to the local video stream
-  const [remoteVideoStreamId, setRemoteVideoStreamId] = useState(''); //hook that will contain the id to the remove video stream
 
   // componentDidMount function to handle the calling functionality including the subcriptions and unsubscriptions
   useEffect(() => {
@@ -31,22 +34,39 @@ const Calling = ({route, navigation}) => {
 
     // creating a makeCall async function to call the callee
     const makeCall = async () => {
-      call.current = await voximplant.call(callee.userName, callSettings);
+      call.current = await voximplant.call(user.userName, callSettings);
       subscribeToCallEvents();
     };
 
-    // in case the user receives a call
+    // in case the user receives a call and he accepts it
     const answerCall = async () => {
-      subscribeToCallEvents();
-      endpoint.current = call.current.getEndpoints()[0];
-      subscribeToEndpointEvent();
-      call.current.answer(callSettings);
+      if (!isVideoCall) {
+        navigation.navigate('VoiceCall', {
+          user,
+          loggedUser,
+          isIncomingCall,
+          isVideoCall,
+          call,
+          callStatus,
+          setCallStatus,
+        });
+      } else {
+        navigation.navigate('VideoCall', {
+          user,
+          loggedUser,
+          isIncomingCall,
+          isVideoCall,
+          call,
+          callStatus,
+          setCallStatus,
+        });
+      }
     };
 
     // call events that can occur on the caller endpoint
     const subscribeToCallEvents = () => {
       call.current.on(Voximplant.CallEvents.Failed, callEvent => {
-        showError(callEvent.reason, navigation);
+        showError(callEvent.reason, navigation, loggedUser);
         onHangupPress();
       });
       call.current.on(Voximplant.CallEvents.ProgressToneStart, callEvent => {
@@ -54,9 +74,34 @@ const Calling = ({route, navigation}) => {
       });
       call.current.on(Voximplant.CallEvents.Connected, callEvent => {
         setCallStatus('Connected');
+        if (!isVideoCall) {
+          navigation.navigate('VoiceCall', {
+            user,
+            loggedUser,
+            isIncomingCall,
+            isVideoCall,
+            call,
+            callStatus,
+            setCallStatus,
+          });
+        } else {
+          navigation.navigate('VideoCall', {
+            user,
+            loggedUser,
+            isIncomingCall,
+            isVideoCall,
+            call,
+            callStatus,
+            setCallStatus,
+            localVideoStreamId,
+            remoteVideoStreamId,
+          });
+        }
       });
       call.current.on(Voximplant.CallEvents.Disconnected, callEvent => {
-        navigation.navigate('History', {uID: caller.id});
+        console.log(loggedUser);
+        // navigation.navigate('History', {uID: loggedUser?.id});
+        navigation.navigate('History');
       });
       call.current.on(
         Voximplant.CallEvents.LocalVideoStreamAdded,
@@ -67,6 +112,9 @@ const Calling = ({route, navigation}) => {
       call.current.on(Voximplant.CallEvents.EndpointAdded, callEvent => {
         endpoint.current = callEvent.endpoint;
         subscribeToEndpointEvent();
+      });
+      call.current.on(Voximplant.CallEvents.NOT_LOGGED_IN, callEvent => {
+        login(loggedUser.username, loggedUser.password, navigation);
       });
     };
 
@@ -104,7 +152,7 @@ const Calling = ({route, navigation}) => {
       </TouchableOpacity>
       <View style={styles.userInfo}>
         <Text style={styles.username}>
-          {callee?.userName ? callee?.userName : 'Default user'}
+          {user?.userName ? user?.userName : user}
         </Text>
         <Text style={styles.ringing}>{callStatus}</Text>
       </View>
@@ -147,7 +195,7 @@ const styles = StyleSheet.create({
   },
 
   ringing: {
-    color: '#808080',
+    color: 'transparent',
     padding: 20,
     fontFamily: 'Inter',
     fontSize: 20,

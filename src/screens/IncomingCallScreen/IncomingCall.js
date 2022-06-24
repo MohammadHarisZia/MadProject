@@ -1,19 +1,20 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {Voximplant} from 'react-native-voximplant';
 
 const IncomingCall = ({route, navigation}) => {
-  const [caller, setCaller] = useState('');
-  const {call, callee} = route.params;
+  const [user, setUser] = useState('');
+  const {call, loggedUser} = route.params;
 
   // onComponentDidMount hook to get the display name of the caller and add an event handler if the user decides to decline the call
   useEffect(() => {
-    setCaller(call.getEndpoints()[0].displayName);
+    setUser(call.getEndpoints()[0].displayName);
 
     call.on(Voximplant.CallEvents.Disconnected, callEvent => {
-      navigation.navigate('History', {uID: callee.id});
+      // navigation.navigate('History', {uID: loggedUser?.id});
+      navigation.navigate('History');
     });
     return () => {
       call.off(Voximplant.CallEvents.Disconnected);
@@ -22,11 +23,14 @@ const IncomingCall = ({route, navigation}) => {
 
   const onDecline = () => {
     call.decline();
+    // navigation.navigate('History', {uID: loggedUser?.id});
+    navigation.navigate('History');
   };
 
   const onAccept = () => {
     navigation.navigate('Calling', {
-      callee: caller,
+      user,
+      loggedUser,
       call,
       isIncomingCall: true,
     });
@@ -38,7 +42,7 @@ const IncomingCall = ({route, navigation}) => {
         <Ionicons name="chevron-back" size={30} color={'#484848'} />
       </TouchableOpacity>
       <View style={styles.userInfo}>
-        <Text style={styles.username}>{caller ? caller : 'Default user'}</Text>
+        <Text style={styles.username}>{user ? user : 'Default user'}</Text>
         <Text style={styles.incoming}>Incoming Call....</Text>
       </View>
       <View style={styles.callControlsContainer}>

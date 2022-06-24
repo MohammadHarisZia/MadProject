@@ -13,6 +13,7 @@ const UserChat = props => {
   // fetching data from the props
   const {loggedUser, user, recent, isRead, time} = props;
 
+  // console.log(loggedUser);
   // storing the other user object in async storage to be used in other screens
   // const storeData = async () => {
   //   try {

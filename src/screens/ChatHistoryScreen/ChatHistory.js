@@ -2,6 +2,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {ref, onValue, push} from 'firebase/database';
 import {Voximplant} from 'react-native-voximplant';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // local imports
 import UserChat from '../../components/UserChat/UserChat';
@@ -15,7 +16,9 @@ import {voximplant, showError, convertCodeMessage, login} from '../../../Vox';
 const ChatHistory = ({navigation, route}) => {
   const [option, setOption] = useState('chat');
   const id = route.params?.uID;
-  const loggedUser = users[id];
+  const [loggedUser, setLoggedUser] = useState();
+  // console.log('CAHT HISTORY', id);
+  // console.log('CAHT HISTORY', loggedUser);
   const [fetchRooms, setFetchRooms] = useState([]);
 
   let latestMessage = '';
@@ -27,8 +30,21 @@ const ChatHistory = ({navigation, route}) => {
 
   // onComponentMount useEffect to connect to the voximplant, get the client state, log in the user
   useEffect(() => {
+    const getData = async () => {
+      try {
+        const value = await AsyncStorage.getItem('userID');
+        const data = await JSON.parse(value);
+        console.log('DATA', data);
+        setLoggedUser(users[data - 1]);
+      } catch (e) {
+        return 0;
+      }
+    };
+
+    if (!loggedUser) getData();
+
     // function to connect and login the user to the voximplant sdk
-    login(loggedUser.userName, loggedUser.password);
+    if (loggedUser) login(loggedUser.userName, loggedUser.password);
   }, [loggedUser]);
 
   // THIS PIECE OF CODE WILL BE USED EVERYWHERE
@@ -38,7 +54,7 @@ const ChatHistory = ({navigation, route}) => {
     voximplant.on(Voximplant.ClientEvents.IncomingCall, incomingCallEvent => {
       navigation.navigate('IncomingCall', {
         call: incomingCallEvent.call,
-        callee: loggedUser,
+        loggedUser: loggedUser,
       });
     });
 
@@ -55,7 +71,7 @@ const ChatHistory = ({navigation, route}) => {
         setFetchRooms(Object.values(data).map(room => Object.values(room)));
       }
     });
-  }, []);
+  }, [loggedUser]);
 
   /**************************************VOXIMPLANT CODE ENDING************************ */
 
@@ -71,16 +87,16 @@ const ChatHistory = ({navigation, route}) => {
     for (let i = 0; i < fetchRooms.length; i++) {
       const lastMessageIndex = fetchRooms[i].length - 1;
       if (
-        fetchRooms[i][lastMessageIndex].receiverId === loggedUser.id &&
-        fetchRooms[i][lastMessageIndex].senderId === user.id
+        fetchRooms[i][lastMessageIndex].receiverId === loggedUser?.id &&
+        fetchRooms[i][lastMessageIndex].senderId === user?.id
       ) {
         latestMessage = fetchRooms[i][lastMessageIndex].message;
         latestMessageTime = getTime(fetchRooms[i][lastMessageIndex].date);
         latestMessageReadStatus = fetchRooms[i][lastMessageIndex].isRead;
         break;
       } else if (
-        fetchRooms[i][lastMessageIndex].senderId === loggedUser.id &&
-        fetchRooms[i][lastMessageIndex].receiverId === user.id
+        fetchRooms[i][lastMessageIndex].senderId === loggedUser?.id &&
+        fetchRooms[i][lastMessageIndex].receiverId === user?.id
       ) {
         latestMessage = 'You: ' + fetchRooms[i][lastMessageIndex].message;
         latestMessageTime = getTime(fetchRooms[i][lastMessageIndex].date);
