@@ -13,26 +13,6 @@ const UserChat = props => {
   // fetching data from the props
   const {loggedUser, user, recent, isRead, time} = props;
 
-  // console.log(loggedUser);
-  // storing the other user object in async storage to be used in other screens
-  // const storeData = async () => {
-  //   try {
-  //     const data = JSON.stringify(user);
-  //     await AsyncStorage.setItem('user', data);
-  //     return true;
-  //   } catch (e) {
-  //     Alert.alert('Error', 'failed to set the user in async storage', [
-  //       {text: 'OK'},
-  //       {
-  //         text: 'RETRY',
-  //         onPress: () => {
-  //           storeData(user);
-  //         },
-  //       },
-  //     ]);
-  //     return false;
-  //   }
-  // };
 
   const openChat = async () => {
     // const stored = await storeData();

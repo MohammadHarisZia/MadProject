@@ -6,9 +6,9 @@ import {Colors} from '../../../DesignSystem/Colors';
 import {messages} from '../../../DummyData/messages';
 
 const Message = props => {
-  const background = props?.senderID !== props?.id ? '#eeeeee' : '#484848';
-  const color = props?.senderID !== props?.id ? '#484848' : '#eeeeee';
-  const align = props?.senderID === props?.id ? 'flex-end' : 'flex-start';
+  const background = props?.loggedUserID !== props?.id ? '#eeeeee' : '#484848';
+  const color = props?.loggedUserID !== props?.id ? '#484848' : '#eeeeee';
+  const align = props?.loggedUserID === props?.id ? 'flex-end' : 'flex-start';
 
   // console.log(background, color, align);
   // console.log('current user', props?.senderID);

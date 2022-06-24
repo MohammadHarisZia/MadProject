@@ -35,18 +35,6 @@ const VoiceCall = ({route, navigation}) => {
       endpoint.current = call.current.getEndpoints()[0];
       subscribeToEndpointEvent();
       call.current.answer(callSettings);
-      if (isVideoCall) {
-        navigation.navigate('VideoCall', {
-          user,
-          loggedUser,
-          isIncomingCall,
-          isVideoCall,
-          call,
-          callStatus,
-          setCallStatus,
-        });
-        return;
-      }
     };
 
     // function to hangup the call

@@ -88,14 +88,14 @@ const ChatHistory = ({navigation, route}) => {
       const lastMessageIndex = fetchRooms[i].length - 1;
       if (
         fetchRooms[i][lastMessageIndex].receiverId === loggedUser?.id &&
-        fetchRooms[i][lastMessageIndex].senderId === user?.id
+        fetchRooms[i][lastMessageIndex].loggedUserId === user?.id
       ) {
         latestMessage = fetchRooms[i][lastMessageIndex].message;
         latestMessageTime = getTime(fetchRooms[i][lastMessageIndex].date);
         latestMessageReadStatus = fetchRooms[i][lastMessageIndex].isRead;
         break;
       } else if (
-        fetchRooms[i][lastMessageIndex].senderId === loggedUser?.id &&
+        fetchRooms[i][lastMessageIndex].loggedUserId === loggedUser?.id &&
         fetchRooms[i][lastMessageIndex].receiverId === user?.id
       ) {
         latestMessage = 'You: ' + fetchRooms[i][lastMessageIndex].message;
