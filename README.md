@@ -1,2 +1,2 @@
 # MadProject
-A Mobile Based Semester Project App
+A Mobile Based Semester Project App.
